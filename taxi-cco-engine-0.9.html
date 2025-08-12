@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi CCO Engine - By Ushindi.io</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0A2540;
+            --accent: #FFC107;
+            --light-bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #212529;
+            --text-secondary: #6C757D;
+            --success: #198754;
+            --error: #DC3545;
+            --border: #DEE2E6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.1);
+            --accent-shadow: 0 8px 12px rgba(255, 193, 7, 0.2);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo-text p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .stats span {
+            background: var(--light-bg);
+            padding: 0.5rem 0.75rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-bar {
+            display: flex;
+            padding: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .progress-step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            position: relative;
+            min-width: 120px;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            width: 20px;
+            height: 2px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .progress-step:last-child::after {
+            display: none;
+        }
+
+        .progress-step.active::after,
+        .progress-step.completed::after {
+            background: var(--accent);
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .step-container {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .step-container.active {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #1a3551 100%);
+            color: white;
+        }
+
+        .step-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .step-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .step-content {
+            padding: 2rem;
+        }
+
+        /* Selection Grid */
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .selection-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .selection-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .selection-card.selected {
+            border-color: var(--accent);
+            box-shadow: var(--accent-shadow);
+        }
+
+        .selection-card.selected::after {
+            content: '';
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selection-card.selected::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--primary);
+            z-index: 1;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 193, 7, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .selection-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .selection-card p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 193, 7, 0.05);
+        }
+
+        .checkbox-item.checked {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: var(--accent);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-item .fa-check {
+            color: var(--accent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .checkbox-item.checked .fa-check {
+            opacity: 1;
+        }
+
+        /* Navigation Buttons */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: var(--light-bg);
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #e6ad06;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #c6cbd1;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Error Messages */
+        .error-message {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: var(--error);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message.hidden {
+            display: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            padding: 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .result-header {
+            background: var(--light-bg);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-content {
+            padding: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-content pre {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .copy-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: #083044;
+        }
+
+        .copy-btn.success {
+            background: var(--success);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .progress-bar {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .progress-step {
+                min-width: 100px;
+                flex: none;
+            }
+
+            .selection-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-navigation {
+                padding: 1rem;
+            }
+
+            .btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Dark theme elements */
+        .kb-insight {
+            background: rgba(10, 37, 64, 0.05);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .kb-insight .fa-lightbulb {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
+        /* Effet futuriste pour NO OBJECTIONS ENGINE */
+        .btn-futuristic {
+            background: linear-gradient(90deg, #00ffe7 0%, #009688 100%);
+            color: #222;
+            font-weight: 700;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px #00ffe7, 0 0 40px #009688;
+            border: 2px solid #00ffe7;
+            text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-futuristic:hover {
+            background: linear-gradient(90deg, #009688 0%, #00ffe7 100%);
+            color: #fff;
+            box-shadow: 0 0 40px #00ffe7, 0 0 60px #009688;
+            border-color: #009688;
+            transform: scale(1.05);
+        }
+
+        .btn-futuristic::after {
+            content: '';
+            position: absolute;
+            left: -50%;
+            top: 0;
+            width: 200%;
+            height: 100%;
+            background: rgba(0, 255, 231, 0.08);
+            transform: skewX(-20deg);
+            transition: left 0.5s;
+            z-index: 0;
+        }
+
+        .btn-futuristic:hover::after {
+            left: 0;
+        }
+
+        .btn-futuristic span {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-taxi"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Taxi CCO Engine</h1>
+                        <p>By Ushindi.io</p>
+                    </div>
+                </div>
+                <div class="stats">
+                    <span><i class="fas fa-magic"></i> Prompts générés: <strong id="prompt-counter">0</strong></span>
+                    <span><i class="fas fa-clock"></i> Version 2025</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="container">
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="0">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Plateforme</div>
+                </div>
+                <div class="progress-step" data-step="1">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Objectif</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Public</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Contenu</div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">Ressources</div>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-circle">6</div>
+                    <div class="step-label">Valeurs</div>
+                </div>
+                <div class="progress-step" data-step="6">
+                    <div class="step-circle">7</div>
+                    <div class="step-label">Message</div>
+                </div>
+                <div class="progress-step" data-step="7">
+                    <div class="step-circle">8</div>
+                    <div class="step-label">Résultats</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Step 1: Platform Selection -->
+            <div class="step-container active" id="step-0">
+                <div class="step-header">
+                    <h2><i class="fab fa-instagram"></i> Choisissez votre plateforme</h2>
+                    <p>Sélectionnez la plateforme sur laquelle vous souhaitez publier votre contenu marketing.</p>
+                </div>
+                <div class="step-content">
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Insight 2025:</strong> TikTok et Instagram Reels génèrent 42% plus de portée que les
+                        posts traditionnels. LinkedIn privilégie les contenus >800 caractères (+70% d'engagement).
+                    </div>
+                    <div class="selection-grid">
+                        <div class="selection-card" data-value="instagram" data-type="platform">
+                            <div class="card-icon"><i class="fab fa-instagram"></i></div>
+                            <h3>Instagram</h3>
+                            <p>Reels, Stories, carrousels. Idéal pour le contenu visuel et l'inspiration. Format 9:16
+                                recommandé.</p>
+                        </div>
+                        <div class="selection-card" data-value="tiktok" data-type="platform">
+                            <div class="card-icon"><i class="fab fa-tiktok"></i></div>
+                            <h3>TikTok</h3>
+                            <p>Vidéos courtes virales ≤60s. Parfait pour toucher un public jeune avec du contenu
+                                créatif.</p>
+                        </div>
+                        <div class="selection-card" data-value="linkedin" data-type="platform">
+                            <div class="card-icon"><i class="fab fa-linkedin"></i></div>
+                            <h3>LinkedIn</h3>
+                            <p>Réseau professionnel. Excellente portée pour le B2B et contenus expertise/témoignages
+                                clients.</p>
+                        </div>
+                        <div class="selection-card" data-value="facebook" data-type="platform">
+                            <div class="card-icon"><i class="fab fa-facebook"></i></div>
+                            <h3>Facebook</h3>
+                            <p>Large audience, groupes locaux. Idéal pour toucher les familles et communautés locales.
+                            </p>
+                        </div>
+                        <div class="selection-card" data-value="youtube" data-type="platform">
+                            <div class="card-icon"><i class="fab fa-youtube"></i></div>
+                            <h3>YouTube</h3>
+                            <p>Shorts ≤60s ou formats longs. Parfait pour tutoriels, témoignages détaillés et
+                                démonstrations.</p>
+                        </div>
+                        <div class="selection-card" data-value="twitter" data-type="platform">
+                            <div class="card-icon"><i class="fab fa-twitter"></i></div>
+                            <h3>X (Twitter)</h3>
+                            <p>Messages courts, actualités en temps réel. Idéal pour le service client et les
+                                communications rapides.</p>
+                        </div>
+                    </div>
+                    <div class="error-message hidden" id="error-platform">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Veuillez sélectionner une plateforme pour continuer.
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" disabled>
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-primary" disabled id="next-platform">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Objective Selection -->
+            <div class="step-container" id="step-1">
+                <div class="step-header">
+                    <h2><i class="fas fa-bullseye"></i> Définissez votre objectif</h2>
+                    <p>Quel est le but principal de ce contenu marketing ?</p>
+                </div>
+                <div class="step-content">
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Tendance 2025:</strong> Les contenus de notoriété performent mieux avec un format "raw"
+                        authentique. La conversion directe nécessite du live shopping ou des DM automatisés.
+                    </div>
+                    <div class="selection-grid">
+                        <div class="selection-card" data-value="awareness" data-type="objective">
+                            <div class="card-icon"><i class="fas fa-eye"></i></div>
+                            <h3>Notoriété</h3>
+                            <p>Faire connaître votre entreprise de taxi et augmenter votre visibilité locale.</p>
+                        </div>
+                        <div class="selection-card" data-value="engagement" data-type="objective">
+                            <div class="card-icon"><i class="fas fa-heart"></i></div>
+                            <h3>Engagement</h3>
+                            <p>Créer de l'interaction, des commentaires et fidéliser votre communauté existante.</p>
+                        </div>
+                        <div class="selection-card" data-value="conversion" data-type="objective">
+                            <div class="card-icon"><i class="fas fa-shopping-cart"></i></div>
+                            <h3>Conversion</h3>
+                            <p>Générer des réservations directes et transformer les vues en clients payants.</p>
+                        </div>
+                        <div class="selection-card" data-value="trust" data-type="objective">
+                            <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                            <h3>Confiance</h3>
+                            <p>Rassurer sur la qualité du service avec témoignages et preuves sociales.</p>
+                        </div>
+                        <div class="selection-card" data-value="education" data-type="objective">
+                            <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <h3>Éducation</h3>
+                            <p>Informer sur vos services, tarifs transparents et zones de couverture.</p>
+                        </div>
+                        <div class="selection-card" data-value="recruitment" data-type="objective">
+                            <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+                            <h3>Recrutement</h3>
+                            <p>Attirer de nouveaux chauffeurs partenaires pour développer votre flotte.</p>
+                        </div>
+                    </div>
+                    <div class="error-message hidden" id="error-objective">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Veuillez sélectionner un objectif pour continuer.
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" id="prev-objective">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-primary" disabled id="next-objective">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Audience Selection -->
+            <div class="step-container" id="step-2">
+                <div class="step-header">
+                    <h2><i class="fas fa-users"></i> Identifiez votre public cible</h2>
+                    <p>À qui s'adresse prioritairement ce contenu ?</p>
+                </div>
+                <div class="step-content">
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Data Suisse 2025:</strong> 73% des touristes recherchent des visuels authentiques
+                        locaux. Les professionnels privilégient la ponctualité (+47% critère décisif) et tarifs
+                        transparents.
+                    </div>
+                    <div class="selection-grid">
+                        <div class="selection-card" data-value="tourists" data-type="audience">
+                            <div class="card-icon"><i class="fas fa-camera"></i></div>
+                            <h3>Touristes</h3>
+                            <p>Visiteurs découvrant la région, besoin de transport fiable vers attractions touristiques.
+                            </p>
+                        </div>
+                        <div class="selection-card" data-value="professionals" data-type="audience">
+                            <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+                            <h3>Professionnels</h3>
+                            <p>Cadres, commerciaux nécessitant un transport ponctuel pour meetings et aéroports.</p>
+                        </div>
+                        <div class="selection-card" data-value="locals" data-type="audience">
+                            <div class="card-icon"><i class="fas fa-home"></i></div>
+                            <h3>Résidents locaux</h3>
+                            <p>Habitants réguliers ayant besoin de transport occasionnel ou récurrent.</p>
+                        </div>
+                        <div class="selection-card" data-value="elderly" data-type="audience">
+                            <div class="card-icon"><i class="fas fa-user-friends"></i></div>
+                            <h3>Seniors</h3>
+                            <p>Personnes âgées privilégiant confort, sécurité et assistance personnalisée.</p>
+                        </div>
+                        <div class="selection-card" data-value="students" data-type="audience">
+                            <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <h3>Étudiants</h3>
+                            <p>Jeunes sensibles au prix, trajets université/gare et sorties nocturnes.</p>
+                        </div>
+                        <div class="selection-card" data-value="families" data-type="audience">
+                            <div class="card-icon"><i class="fas fa-baby"></i></div>
+                            <h3>Familles</h3>
+                            <p>Parents avec enfants, priorité sécurité et véhicules adaptés (sièges auto).</p>
+                        </div>
+                    </div>
+                    <div class="error-message hidden" id="error-audience">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Veuillez sélectionner un public cible pour continuer.
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" id="prev-audience">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-primary" disabled id="next-audience">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Content Type Selection -->
+            <div class="step-container" id="step-3">
+                <div class="step-header">
+                    <h2><i class="fas fa-film"></i> Sélectionnez le type de contenu</h2>
+                    <p>Quel format souhaitez-vous créer ?</p>
+                </div>
+                <div class="step-content">
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Formats 2025:</strong> 82% des vidéos sont regardées sans son sur mobile. Les vidéos
+                        courtes (≤60s) génèrent 2,5x plus d'engagement que le format long. Lives : +47% de ventes.
+                    </div>
+                    <div class="selection-grid">
+                        <div class="selection-card" data-value="post" data-type="content">
+                            <div class="card-icon"><i class="fas fa-image"></i></div>
+                            <h3>Post Statique</h3>
+                            <p>Image avec texte accrocheur. Simple à créer, efficace pour informer rapidement.</p>
+                        </div>
+                        <div class="selection-card" data-value="carousel" data-type="content">
+                            <div class="card-icon"><i class="fas fa-images"></i></div>
+                            <h3>Carrousel</h3>
+                            <p>Suite d'images/slides. Parfait pour présenter services, tarifs ou témoignages étape par
+                                étape.</p>
+                        </div>
+                        <div class="selection-card" data-value="video" data-type="content">
+                            <div class="card-icon"><i class="fas fa-video"></i></div>
+                            <h3>Vidéo courte</h3>
+                            <p>Reel/Short ≤60s. Format viral, idéal pour montrer véhicules, trajets ou coulisses.</p>
+                        </div>
+                        <div class="selection-card" data-value="story" data-type="content">
+                            <div class="card-icon"><i class="fas fa-clock"></i></div>
+                            <h3>Story</h3>
+                            <p>Contenu éphémère 24h. Parfait pour offres flash, actualités quotidiennes du service.</p>
+                        </div>
+                        <div class="selection-card" data-value="live" data-type="content">
+                            <div class="card-icon"><i class="fas fa-broadcast-tower"></i></div>
+                            <h3>Live</h3>
+                            <p>Diffusion en direct. Engagement maximal, Q&A avec clients, visite virtuelles véhicules.
+                            </p>
+                        </div>
+                        <div class="selection-card" data-value="testimonial" data-type="content">
+                            <div class="card-icon"><i class="fas fa-quote-right"></i></div>
+                            <h3>Témoignage</h3>
+                            <p>Avis client authentique. Crédibilité maximale, rassure et influence la décision d'achat.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="error-message hidden" id="error-content">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Veuillez sélectionner un type de contenu pour continuer.
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" id="prev-content">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-primary" disabled id="next-content">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 5: Resources Inventory -->
+            <div class="step-container" id="step-4">
+                <div class="step-header">
+                    <h2><i class="fas fa-folder-open"></i> Inventaire des ressources</h2>
+                    <p>Quels contenus avez-vous déjà à disposition et lesquels devez-vous créer ?</p>
+                </div>
+                <div class="step-content">
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Conseil Pro:</strong> Les contenus "raw" non-retouchés génèrent 4,2x plus de partages.
+                        Privilégiez l'authenticité à la sur-production technique.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="existing-videos">
+                            <i class="fas fa-video"></i> URLs de vos vidéos existantes
+                        </label>
+                        <textarea class="form-textarea" id="existing-videos"
+                            placeholder="Collez ici les liens de vos vidéos YouTube, Instagram, etc.&#10;Un lien par ligne.&#10;Exemple: https://www.youtube.com/watch?v=..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="existing-photos">
+                            <i class="fas fa-image"></i> URLs de vos photos existantes
+                        </label>
+                        <textarea class="form-textarea" id="existing-photos"
+                            placeholder="Collez ici les liens de vos photos (Google Drive, site web, réseaux sociaux)&#10;Un lien par ligne."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-plus-circle"></i> Contenus à créer
+                        </label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" data-value="photos-vehicules">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="photos-vehicules">
+                                <span>Photos de vos véhicules</span>
+                            </div>
+                            <div class="checkbox-item" data-value="photos-chauffeurs">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="photos-chauffeurs">
+                                <span>Photos des chauffeurs</span>
+                            </div>
+                            <div class="checkbox-item" data-value="video-presentation">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="video-presentation">
+                                <span>Vidéo de présentation</span>
+                            </div>
+                            <div class="checkbox-item" data-value="temoignages-video">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="temoignages-video">
+                                <span>Témoignages clients vidéo</span>
+                            </div>
+                            <div class="checkbox-item" data-value="photos-bureaux">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="photos-bureaux">
+                                <span>Photos des locaux/bureaux</span>
+                            </div>
+                            <div class="checkbox-item" data-value="video-coulisses">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="video-coulisses">
+                                <span>Vidéo coulisses du service</span>
+                            </div>
+                            <div class="checkbox-item" data-value="infographies">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="infographies">
+                                <span>Infographies (tarifs, zones)</span>
+                            </div>
+                            <div class="checkbox-item" data-value="photos-lieux">
+                                <i class="fas fa-check"></i>
+                                <input type="checkbox" value="photos-lieux">
+                                <span>Photos lieux emblématiques</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" id="prev-resources">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-primary" id="next-resources">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 6: Value Drivers -->
+            <div class="step-container" id="step-5">
+                <div class="step-header">
+                    <h2><i class="fas fa-star"></i> Valeurs perçues par vos clients</h2>
+                    <p>Quelles sont les qualités principales de votre service taxi ? (Sélection multiple)</p>
+                </div>
+                <div class="step-content">
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Insights Suisse:</strong> 47% des clients priorisent la ponctualité, 38% la sécurité,
+                        31% les tarifs transparents. Les valeurs émotionnelles (confort, convivialité) fidélisent
+                        davantage.
+                    </div>
+                    <div class="selection-grid">
+                        <div class="selection-card multiple" data-value="ponctualite" data-type="value">
+                            <div class="card-icon"><i class="fas fa-clock"></i></div>
+                            <h3>Ponctualité</h3>
+                            <p>Arrivée à l'heure convenue, respect des créneaux de rendez-vous clients.</p>
+                        </div>
+                        <div class="selection-card multiple" data-value="securite" data-type="value">
+                            <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                            <h3>Sécurité</h3>
+                            <p>Conduite sûre, véhicules entretenus, chauffeurs professionnels agréés.</p>
+                        </div>
+                        <div class="selection-card multiple" data-value="prix-transparent" data-type="value">
+                            <div class="card-icon"><i class="fas fa-euro-sign"></i></div>
+                            <h3>Prix transparent</h3>
+                            <p>Tarifs clairs annoncés à l'avance, pas de surprises sur la facture finale.</p>
+                        </div>
+                        <div class="selection-card multiple" data-value="confort" data-type="value">
+                            <div class="card-icon"><i class="fas fa-car"></i></div>
+                            <h3>Confort</h3>
+                            <p>Véhicules récents, climatisation, sièges confortables, propreté irréprochable.</p>
+                        </div>
+                        <div class="selection-card multiple" data-value="disponibilite" data-type="value">
+                            <div class="card-icon"><i class="fas fa-phone"></i></div>
+                            <h3>Disponibilité 24/7</h3>
+                            <p>Service accessible jour et nuit, weekends et jours fériés inclus.</p>
+                        </div>
+                        <div class="selection-card multiple" data-value="local-knowledge" data-type="value">
+                            <div class="card-icon"><i class="fas fa-map-marked-alt"></i></div>
+                            <h3>Connaissance locale</h3>
+                            <p>Chauffeurs connaissant parfaitement la région, raccourcis et bons conseils.</p>
+                        </div>
+                        <div class="selection-card multiple" data-value="convivialite" data-type="value">
+                            <div class="card-icon"><i class="fas fa-smile"></i></div>
+                            <h3>Convivialité</h3>
+                            <p>Accueil chaleureux, écoute client, service personnalisé et humain.</p>
+                        </div>
+                        <div class="selection-card multiple" data-value="ecologique" data-type="value">
+                            <div class="card-icon"><i class="fas fa-leaf"></i></div>
+                            <h3>Éco-responsable</h3>
+                            <p>Véhicules hybrides/électriques, démarche environnementale, trajets optimisés.</p>
+                        </div>
+                    </div>
+                    <div class="error-message hidden" id="error-values">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Veuillez sélectionner au moins une valeur perçue pour continuer.
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" id="prev-values">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-primary" disabled id="next-values">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 7: AI Assistant Message -->
+            <div class="step-container" id="step-6">
+                <div class="step-header">
+                    <h2><i class="fas fa-robot"></i> Personnalisation du message</h2>
+                    <p>Ajustez le message principal et les paramètres de génération.</p>
+                </div>
+                <div class="step-content">
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Tip IA:</strong> Un message authentique et spécifique génère 3x plus d'engagement qu'un
+                        contenu générique. Mentionnez des détails concrets de votre service.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="main-message">
+                            <i class="fas fa-comment"></i> Message principal personnalisé
+                        </label>
+                        <textarea class="form-textarea" id="main-message"
+                            placeholder="Décrivez votre message clé...&#10;Exemple: 'Notre équipe de 12 chauffeurs locaux vous garantit un service ponctuel 24/7 dans toute la région. Tarifs fixes annoncés à l'avance, véhicules récents et climatisés.'"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="company-name">
+                            <i class="fas fa-building"></i> Nom de votre entreprise
+                        </label>
+                        <input type="text" class="form-input" id="company-name"
+                            placeholder="Ex: Taxi Alpin Services, Genève Express, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="location">
+                            <i class="fas fa-map-marker-alt"></i> Ville/Région principale
+                        </label>
+                        <input type="text" class="form-input" id="location"
+                            placeholder="Ex: Genève, Lausanne, Zurich, Valais, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="tone">
+                            <i class="fas fa-volume-up"></i> Ton souhaité
+                        </label>
+                        <div class="selection-grid">
+                            <div class="selection-card" data-value="professional" data-type="tone">
+                                <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+                                <h3>Professionnel</h3>
+                                <p>Sérieux, rassurant, centré sur la qualité du service.</p>
+                            </div>
+                            <div class="selection-card" data-value="friendly" data-type="tone">
+                                <div class="card-icon"><i class="fas fa-smile"></i></div>
+                                <h3>Convivial</h3>
+                                <p>Chaleureux, proche, accent sur l'aspect humain.</p>
+                            </div>
+                            <div class="selection-card" data-value="premium" data-type="tone">
+                                <div class="card-icon"><i class="fas fa-crown"></i></div>
+                                <h3>Haut de gamme</h3>
+                                <p>Luxueux, exclusif, service d'exception.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" id="prev-message">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn btn-primary" id="generate-prompt">
+                        <i class="fas fa-magic"></i> Générer les prompts
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 8: Results -->
+            <div class="step-container" id="step-7">
+                <div class="step-header">
+                    <h2><i class="fas fa-trophy"></i> Vos prompts marketing générés</h2>
+                    <p>Prompts optimisés prêts à l'emploi pour votre stratégie marketing.</p>
+                </div>
+                <div class="results-section">
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h3><i class="fas fa-file-text"></i> Prompt Texte Optimisé</h3>
+                                <button class="copy-btn" data-target="text-prompt">
+                                    <i class="fas fa-copy"></i> Copier
+                                </button>
+                            </div>
+                            <div class="result-content">
+                                <pre id="text-prompt"></pre>
+                            </div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h3><i class="fas fa-code"></i> Configuration JSON</h3>
+                                <button class="copy-btn" data-target="json-prompt">
+                                    <i class="fas fa-copy"></i> Copier
+                                </button>
+                            </div>
+                            <div class="result-content">
+                                <pre id="json-prompt"></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kb-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Prochaines étapes:</strong> Copiez le prompt texte dans ChatGPT/Claude, ou utilisez le
+                        JSON pour une intégration API. Testez différents angles selon les performances de vos contenus
+                        précédents.
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" id="restart-flow">
+                        <i class="fas fa-redo"></i> Nouveau prompt
+                    </button>
+                    <a href="https://chatgpt.com/g/g-689526a65fb881919cd9591e5fee2f71-no-objections-engine"
+                        target="_blank" class="btn btn-futuristic"><span>TAXI CCO ENGINE</span></a>
+                    </button>
+                </div>
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="prevStep()">Retour</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <script>
+        // Application State
+        const TaxiCCOEngine = {
+            currentStep: 0,
+            totalSteps: 8,
+            state: {
+                platform: null,
+                objective: null,
+                audience: null,
+                contentType: null,
+                existingVideos: [],
+                existingPhotos: [],
+                contentToCreate: [],
+                valueDrivers: [],
+                mainMessage: '',
+                companyName: '',
+                location: '',
+                tone: 'professional'
+            },
+
+            // Initialize the application
+            init() {
+                this.bindEvents();
+                this.updateProgress();
+                this.loadState();
+            },
+
+            // Load state from localStorage
+            loadState() {
+                const saved = localStorage.getItem('taxi-cco-state');
+                if (saved) {
+                    try {
+                        const parsedState = JSON.parse(saved);
+                        this.state = { ...this.state, ...parsedState };
+                        this.populateFields();
+                    } catch (e) {
+                        console.log('No valid saved state');
+                    }
+                }
+            },
+
+            // Save state to localStorage
+            saveState() {
+                localStorage.setItem('taxi-cco-state', JSON.stringify(this.state));
+            },
+
+            // Populate form fields with saved state
+            populateFields() {
+                // Platform
+                if (this.state.platform) {
+                    this.selectCard(document.querySelector(`[data-value="${this.state.platform}"][data-type="platform"]`));
+                }
+
+                // Objective
+                if (this.state.objective) {
+                    this.selectCard(document.querySelector(`[data-value="${this.state.objective}"][data-type="objective"]`));
+                }
+
+                // Audience
+                if (this.state.audience) {
+                    this.selectCard(document.querySelector(`[data-value="${this.state.audience}"][data-type="audience"]`));
+                }
+
+                // Content Type
+                if (this.state.contentType) {
+                    this.selectCard(document.querySelector(`[data-value="${this.state.contentType}"][data-type="content"]`));
+                }
+
+                // Values
+                this.state.valueDrivers.forEach(value => {
+                    this.selectCard(document.querySelector(`[data-value="${value}"][data-type="value"]`));
+                });
+
+                // Tone
+                if (this.state.tone) {
+                    this.selectCard(document.querySelector(`[data-value="${this.state.tone}"][data-type="tone"]`));
+                }
+
+                // Text fields
+                if (this.state.mainMessage) document.getElementById('main-message').value = this.state.mainMessage;
+                if (this.state.companyName) document.getElementById('company-name').value = this.state.companyName;
+                if (this.state.location) document.getElementById('location').value = this.state.location;
+                if (this.state.existingVideos.length) document.getElementById('existing-videos').value = this.state.existingVideos.join('\n');
+                if (this.state.existingPhotos.length) document.getElementById('existing-photos').value = this.state.existingPhotos.join('\n');
+
+                // Checkboxes
+                this.state.contentToCreate.forEach(item => {
+                    const checkbox = document.querySelector(`[data-value="${item}"]`);
+                    if (checkbox && checkbox.closest('.checkbox-item')) {
+                        this.toggleCheckbox(checkbox.closest('.checkbox-item'));
+                    }
+                });
+            },
+
+            // Bind all event listeners
+            bindEvents() {
+                // Card selections
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.selection-card')) {
+                        this.handleCardSelection(e.target.closest('.selection-card'));
+                    }
+
+                    if (e.target.closest('.checkbox-item')) {
+                        this.toggleCheckbox(e.target.closest('.checkbox-item'));
+                    }
+
+                    if (e.target.closest('.copy-btn')) {
+                        this.copyToClipboard(e.target.closest('.copy-btn'));
+                    }
+                });
+
+                // Navigation buttons
+                document.getElementById('next-platform')?.addEventListener('click', () => this.nextStep());
+                document.getElementById('next-objective')?.addEventListener('click', () => this.nextStep());
+                document.getElementById('next-audience')?.addEventListener('click', () => this.nextStep());
+                document.getElementById('next-content')?.addEventListener('click', () => this.nextStep());
+                document.getElementById('next-resources')?.addEventListener('click', () => this.nextStep());
+                document.getElementById('next-values')?.addEventListener('click', () => this.nextStep());
+                document.getElementById('generate-prompt')?.addEventListener('click', () => this.generatePrompts());
+
+                // Previous buttons
+                document.getElementById('prev-objective')?.addEventListener('click', () => this.prevStep());
+                document.getElementById('prev-audience')?.addEventListener('click', () => this.prevStep());
+                document.getElementById('prev-content')?.addEventListener('click', () => this.prevStep());
+                document.getElementById('prev-resources')?.addEventListener('click', () => this.prevStep());
+                document.getElementById('prev-values')?.addEventListener('click', () => this.prevStep());
+                document.getElementById('prev-message')?.addEventListener('click', () => this.prevStep());
+
+                // Restart button
+                document.getElementById('restart-flow')?.addEventListener('click', () => this.restart());
+
+                // Input changes
+                document.addEventListener('input', (e) => {
+                    if (e.target.id === 'existing-videos') {
+                        this.state.existingVideos = e.target.value.split('\n').filter(url => url.trim());
+                    }
+                    if (e.target.id === 'existing-photos') {
+                        this.state.existingPhotos = e.target.value.split('\n').filter(url => url.trim());
+                    }
+                    if (e.target.id === 'main-message') {
+                        this.state.mainMessage = e.target.value;
+                    }
+                    if (e.target.id === 'company-name') {
+                        this.state.companyName = e.target.value;
+                    }
+                    if (e.target.id === 'location') {
+                        this.state.location = e.target.value;
+                    }
+                    this.saveState();
+                });
+            },
+
+            // Handle card selection
+            handleCardSelection(card) {
+                const type = card.dataset.type;
+                const value = card.dataset.value;
+
+                if (card.classList.contains('multiple')) {
+                    // Multiple selection (values)
+                    this.toggleCard(card);
+                    if (card.classList.contains('selected')) {
+                        if (!this.state.valueDrivers.includes(value)) {
+                            this.state.valueDrivers.push(value);
+                        }
+                    } else {
+                        this.state.valueDrivers = this.state.valueDrivers.filter(v => v !== value);
+                    }
+                } else {
+                    // Single selection
+                    this.selectCard(card);
+                    this.state[type === 'platform' ? 'platform' :
+                        type === 'objective' ? 'objective' :
+                            type === 'audience' ? 'audience' :
+                                type === 'content' ? 'contentType' :
+                                    type === 'tone' ? 'tone' : type] = value;
+                }
+
+                this.validateStep();
+                this.saveState();
+            },
+
+            // Select a single card (deselects others of same type)
+            selectCard(card) {
+                if (!card) return;
+
+                const type = card.dataset.type;
+                // Deselect other cards of the same type
+                document.querySelectorAll(`[data-type="${type}"]`).forEach(c => {
+                    c.classList.remove('selected');
+                });
+                // Select the clicked card
+                card.classList.add('selected');
+            },
+
+            // Toggle card selection for multiple choice
+            toggleCard(card) {
+                card.classList.toggle('selected');
+            },
+
+            // Toggle checkbox
+            toggleCheckbox(item) {
+                const checkbox = item.querySelector('input');
+                const value = checkbox.value;
+
+                item.classList.toggle('checked');
+                checkbox.checked = item.classList.contains('checked');
+
+                if (checkbox.checked) {
+                    if (!this.state.contentToCreate.includes(value)) {
+                        this.state.contentToCreate.push(value);
+                    }
+                } else {
+                    this.state.contentToCreate = this.state.contentToCreate.filter(v => v !== value);
+                }
+
+                this.saveState();
+            },
+
+            // Validate current step
+            validateStep() {
+                const currentStepElement = document.getElementById(`step-${this.currentStep}`);
+                const errorElement = currentStepElement.querySelector('.error-message');
+                let isValid = false;
+
+                switch (this.currentStep) {
+                    case 0: // Platform
+                        isValid = this.state.platform !== null;
+                        break;
+                    case 1: // Objective
+                        isValid = this.state.objective !== null;
+                        break;
+                    case 2: // Audience
+                        isValid = this.state.audience !== null;
+                        break;
+                    case 3: // Content Type
+                        isValid = this.state.contentType !== null;
+                        break;
+                    case 4: // Resources (always valid)
+                        isValid = true;
+                        break;
+                    case 5: // Values
+                        isValid = this.state.valueDrivers.length > 0;
+                        break;
+                    case 6: // Message (always valid, can be empty)
+                        isValid = true;
+                        break;
+                    default:
+                        isValid = true;
+                }
+
+                // Show/hide error message
+                if (errorElement) {
+                    if (isValid) {
+                        errorElement.classList.add('hidden');
+                    } else {
+                        errorElement.classList.remove('hidden');
+                    }
+                }
+
+                // Enable/disable next button
+                const nextButton = currentStepElement.querySelector('.btn-primary:not(#generate-prompt):not(#restart-flow)');
+                if (nextButton) {
+                    nextButton.disabled = !isValid;
+                }
+
+                return isValid;
+            },
+
+            // Navigate to next step
+            nextStep() {
+                if (this.validateStep() && this.currentStep < this.totalSteps - 1) {
+                    this.currentStep++;
+                    this.showStep();
+                    this.updateProgress();
+                }
+            },
+
+            // Navigate to previous step
+            prevStep() {
+                if (this.currentStep > 0) {
+                    this.currentStep--;
+                    this.showStep();
+                    this.updateProgress();
+                }
+            },
+
+            // Show current step
+            showStep() {
+                document.querySelectorAll('.step-container').forEach((step, index) => {
+                    step.classList.toggle('active', index === this.currentStep);
+                });
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+            },
+
+            // Update progress bar
+            updateProgress() {
+                document.querySelectorAll('.progress-step').forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index === this.currentStep) {
+                        step.classList.add('active');
+                    } else if (index < this.currentStep) {
+                        step.classList.add('completed');
+                        step.querySelector('.step-circle').innerHTML = '<i class="fas fa-check"></i>';
+                    } else {
+                        step.querySelector('.step-circle').textContent = index + 1;
+                    }
+                });
+            },
+
+            // Generate prompts
+            generatePrompts() {
+                // Collect all input data
+                this.state.existingVideos = document.getElementById('existing-videos').value.split('\n').filter(url => url.trim());
+                this.state.existingPhotos = document.getElementById('existing-photos').value.split('\n').filter(url => url.trim());
+                this.state.mainMessage = document.getElementById('main-message').value;
+                this.state.companyName = document.getElementById('company-name').value;
+                this.state.location = document.getElementById('location').value;
+
+                // Generate text prompt
+                const textPrompt = this.generateTextPrompt();
+                document.getElementById('text-prompt').textContent = textPrompt;
+
+                // Generate JSON prompt
+                const jsonPrompt = this.generateJSONPrompt();
+                document.getElementById('json-prompt').textContent = JSON.stringify(jsonPrompt, null, 2);
+
+                // Update counter
+                this.updateCounter();
+
+                // Go to results step
+                this.nextStep();
+
+                this.saveState();
+            },
+
+            // Generate text prompt
+            generateTextPrompt() {
+                const platformData = this.getPlatformData();
+                const objectiveData = this.getObjectiveData();
+                const audienceData = this.getAudienceData();
+                const contentData = this.getContentData();
+                const toneData = this.getToneData();
+
+                return `# Création de contenu ${contentData.name} pour ${platformData.name}
+
+## Contexte entreprise
+Entreprise : ${this.state.companyName || 'Entreprise de taxi'}
+Localisation : ${this.state.location || 'Suisse'}
+Secteur : Transport de personnes - Taxi
+
+## Objectif de communication
+${objectiveData.description}
+Cible prioritaire : ${audienceData.description}
+
+## Spécifications du contenu
+Format : ${contentData.name}
+Plateforme : ${platformData.name}
+${platformData.specs}
+
+## Message principal
+${this.state.mainMessage || 'Service de taxi professionnel, ponctuel et sécurisé pour tous vos déplacements.'}
+
+## Valeurs à mettre en avant
+${this.state.valueDrivers.map(value => this.getValueDescription(value)).join('\n')}
+
+## Ton à adopter
+${toneData.description}
+
+## Ressources disponibles
+${this.state.existingVideos.length > 0 ? `Vidéos existantes : ${this.state.existingVideos.length} liens fournis` : ''}
+${this.state.existingPhotos.length > 0 ? `Photos existantes : ${this.state.existingPhotos.length} liens fournis` : ''}
+${this.state.contentToCreate.length > 0 ? `Contenus à créer : ${this.state.contentToCreate.join(', ')}` : ''}
+
+## Contraintes techniques 2025
+- Format optimisé : ${platformData.format}
+- Durée recommandée : ${contentData.duration}
+- ${contentData.tips}
+
+## Livrables attendus
+1. Texte/script du contenu optimisé pour ${platformData.name}
+2. Suggestions visuelles spécifiques
+3. Call-to-action adapté à l'objectif ${objectiveData.name}
+4. Hashtags recommandés (si applicable)
+5. Meilleur moment de publication
+
+Génère maintenant ce contenu marketing professionnel en respectant tous ces paramètres.`;
+            },
+
+            // Generate JSON prompt
+            generateJSONPrompt() {
+                return {
+                    meta: {
+                        client: "PME taxi",
+                        locale: "fr-CH",
+                        ville: this.state.location || "Suisse",
+                        generated_at: new Date().toISOString()
+                    },
+                    platform: this.state.platform,
+                    objective: this.state.objective,
+                    audience: this.state.audience,
+                    content_type: this.state.contentType,
+                    value_drivers: this.state.valueDrivers,
+                    main_message: this.state.mainMessage,
+                    company_name: this.state.companyName,
+                    location: this.state.location,
+                    tone: this.state.tone,
+                    assets: {
+                        videos: this.state.existingVideos,
+                        photos: this.state.existingPhotos,
+                        to_create: this.state.contentToCreate
+                    },
+                    constraints: {
+                        tone: this.state.tone,
+                        locale: "fr-CH",
+                        format: this.getPlatformData().format,
+                        duration: this.getContentData().duration
+                    },
+                    expected_outputs: [
+                        "contenu_final",
+                        "suggestions_visuelles",
+                        "cta_optimise",
+                        "hashtags",
+                        "timing_publication"
+                    ],
+                    knowledge_base_insights: this.getKBInsights()
+                };
+            },
+
+            // Get platform specific data
+            getPlatformData() {
+                const platforms = {
+                    instagram: {
+                        name: 'Instagram',
+                        format: '9:16 (1080x1920)',
+                        specs: 'Reels privilégiés par l\'algorithme (+42% de portée). Stories éphémères 24h. Carrousels pour contenu éducatif.'
+                    },
+                    tiktok: {
+                        name: 'TikTok',
+                        format: '9:16 (1080x1920)',
+                        specs: 'Hooks <3s critiques. Auto-chapitrage IA disponible. Favorise contenu authentique et créatif.'
+                    },
+                    linkedin: {
+                        name: 'LinkedIn',
+                        format: 'Variable selon type',
+                        specs: 'Contenus >800 caractères +70% engagement. Privilégier expertise et témoignages B2B.'
+                    },
+                    facebook: {
+                        name: 'Facebook',
+                        format: 'Variable selon type',
+                        specs: 'Groupes locaux très engagés. Favorise interactions authentiques et contenu communautaire.'
+                    },
+                    youtube: {
+                        name: 'YouTube',
+                        format: 'Shorts 9:16, Long 16:9',
+                        specs: 'Shorts ≤60s, chapitres cliquables. Long format pour tutoriels détaillés.'
+                    },
+                    twitter: {
+                        name: 'X (Twitter)',
+                        format: 'Texte + médias',
+                        specs: 'Messages courts, réactivité temps réel. Excellent pour service client et actualités.'
+                    }
+                };
+                return platforms[this.state.platform] || platforms.instagram;
+            },
+
+            // Get objective specific data  
+            getObjectiveData() {
+                const objectives = {
+                    awareness: {
+                        name: 'Notoriété',
+                        description: 'Faire connaître votre service taxi et augmenter votre visibilité locale. Privilégier format raw authentique.'
+                    },
+                    engagement: {
+                        name: 'Engagement',
+                        description: 'Créer de l\'interaction avec votre communauté. Favoriser commentaires, partages et fidélisation.'
+                    },
+                    conversion: {
+                        name: 'Conversion',
+                        description: 'Transformer les vues en réservations clients. Intégrer CTA forts et processus de réservation.'
+                    },
+                    trust: {
+                        name: 'Confiance',
+                        description: 'Rassurer sur la qualité via témoignages authentiques et preuves sociales crédibles.'
+                    },
+                    education: {
+                        name: 'Éducation',
+                        description: 'Informer sur vos services, tarifs transparents et zones de couverture géographique.'
+                    },
+                    recruitment: {
+                        name: 'Recrutement',
+                        description: 'Attirer nouveaux chauffeurs partenaires. Mettre en avant conditions et avantages.'
+                    }
+                };
+                return objectives[this.state.objective] || objectives.awareness;
+            },
+
+            // Get audience specific data
+            getAudienceData() {
+                const audiences = {
+                    tourists: {
+                        description: 'Touristes découvrant la région, cherchant transport fiable vers attractions. Privilégier visuels authentiques locaux (+30% engagement).'
+                    },
+                    professionals: {
+                        description: 'Professionnels priorisant ponctualité (47% critère décisif) et service aéroports/meetings.'
+                    },
+                    locals: {
+                        description: 'Résidents locaux cherchant service régulier de confiance. Valoriser proximité et connaissance terrain.'
+                    },
+                    elderly: {
+                        description: 'Seniors privilégiant confort, sécurité et assistance personnalisée. Rassurer sur professionnalisme.'
+                    },
+                    students: {
+                        description: 'Étudiants sensibles aux prix. Mettre en avant tarifs transparents et service nuit.'
+                    },
+                    families: {
+                        description: 'Familles priorisant sécurité enfants. Valoriser véhicules adaptés et conduite prudente.'
+                    }
+                };
+                return audiences[this.state.audience] || audiences.locals;
+            },
+
+            // Get content type specific data
+            getContentData() {
+                const contents = {
+                    post: {
+                        name: 'Post statique',
+                        duration: 'Image + texte',
+                        tips: '82% contenus vus sans son mobile. Privilégier texte lisible et visuel impactant.'
+                    },
+                    carousel: {
+                        name: 'Carrousel',
+                        duration: '5-10 slides max',
+                        tips: 'Alt-text obligatoire. Storytelling progressif, CTA slide finale.'
+                    },
+                    video: {
+                        name: 'Vidéo courte',
+                        duration: '≤60 secondes',
+                        tips: 'Hook <3s critique. Sous-titres automatiques + relecture manuelle. Générer 2.5x plus engagement.'
+                    },
+                    story: {
+                        name: 'Story',
+                        duration: '15 secondes',
+                        tips: 'Contenu éphémère 24h. Parfait offres flash et actualités quotidiennes.'
+                    },
+                    live: {
+                        name: 'Live',
+                        duration: '20-60 minutes optimal',
+                        tips: 'Engagement 6x supérieur. +47% ventes vs vidéos classiques. Retard 6s = -6% audience.'
+                    },
+                    testimonial: {
+                        name: 'Témoignage',
+                        duration: '30-90 secondes',
+                        tips: 'Authenticité prime sur production. Contenus raw 4.2x plus partagés.'
+                    }
+                };
+                return contents[this.state.contentType] || contents.post;
+            },
+
+            // Get tone specific data
+            getToneData() {
+                const tones = {
+                    professional: {
+                        description: 'Ton professionnel, rassurant et centré sur la qualité de service. Vocabulaire technique approprié.'
+                    },
+                    friendly: {
+                        description: 'Ton convivial et chaleureux, mettant l\'accent sur l\'aspect humain et la proximité client.'
+                    },
+                    premium: {
+                        description: 'Ton haut de gamme, exclusif et luxueux. Service d\'exception et attention aux détails.'
+                    }
+                };
+                return tones[this.state.tone] || tones.professional;
+            },
+
+            // Get value description
+            getValueDescription(value) {
+                const descriptions = {
+                    'ponctualite': '• Ponctualité : Respect strict des horaires convenus',
+                    'securite': '• Sécurité : Conduite sûre et véhicules entretenus',
+                    'prix-transparent': '• Prix transparents : Tarifs clairs sans surprise',
+                    'confort': '• Confort : Véhicules récents et climatisés',
+                    'disponibilite': '• Disponibilité 24/7 : Service continu',
+                    'local-knowledge': '• Connaissance locale : Expertise du terrain',
+                    'convivialite': '• Convivialité : Accueil chaleureux et personnalisé',
+                    'ecologique': '• Éco-responsable : Véhicules hybrides/électriques'
+                };
+                return descriptions[value] || `• ${value}`;
+            },
+
+            // Get knowledge base insights
+            getKBInsights() {
+                return {
+                    video_stats_2025: "82% vidéos vues sans son mobile, 73% consommateurs préfèrent format court",
+                    engagement_tips: "Contenus raw 4.2x plus partagés, authenticity > production",
+                    platform_optimization: "TikTok hooks <3s, LinkedIn >800 char, IG Reels +42% portée",
+                    swiss_market: "47% clients priorisent ponctualité, 38% sécurité, 31% tarifs transparents",
+                    live_performance: "Live shopping +47% ventes, engagement 6x supérieur"
+                };
+            },
+
+            // Update prompt counter
+            updateCounter() {
+                const counter = document.getElementById('prompt-counter');
+                let current = parseInt(counter.textContent) || 0;
+                counter.textContent = current + 1;
+                localStorage.setItem('taxi-cco-counter', current + 1);
+            },
+
+            // Copy to clipboard
+            async copyToClipboard(button) {
+                const target = document.getElementById(button.dataset.target);
+                const text = target.textContent;
+
+                try {
+                    await navigator.clipboard.writeText(text);
+
+                    // Visual feedback
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Copié !';
+                    button.classList.add('success');
+
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('success');
+                    }, 2000);
+
+                } catch (err) {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+
+                    // Visual feedback
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Copié !';
+                    button.classList.add('success');
+
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('success');
+                    }, 2000);
+                }
+            },
+
+            // Restart the flow
+            restart() {
+                // Reset state
+                this.currentStep = 0;
+                this.state = {
+                    platform: null,
+                    objective: null,
+                    audience: null,
+                    contentType: null,
+                    existingVideos: [],
+                    existingPhotos: [],
+                    contentToCreate: [],
+                    valueDrivers: [],
+                    mainMessage: '',
+                    companyName: '',
+                    location: '',
+                    tone: 'professional'
+                };
+
+                // Clear form
+                document.querySelectorAll('.selection-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.querySelectorAll('.checkbox-item').forEach(item => {
+                    item.classList.remove('checked');
+                    const checkbox = item.querySelector('input');
+                    if (checkbox) checkbox.checked = false;
+                });
+                document.querySelectorAll('input, textarea').forEach(input => {
+                    input.value = '';
+                });
+
+                // Reset progress and show first step
+                this.showStep();
+                this.updateProgress();
+                this.validateStep();
+
+                // Clear localStorage
+                localStorage.removeItem('taxi-cco-state');
+            }
+        };
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            TaxiCCOEngine.init();
+
+            // Load counter from localStorage
+            const savedCounter = localStorage.getItem('taxi-cco-counter');
+            if (savedCounter) {
+                document.getElementById('prompt-counter').textContent = savedCounter;
+            }
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.step !== undefined) {
+                TaxiCCOEngine.currentStep = e.state.step;
+                TaxiCCOEngine.showStep();
+                TaxiCCOEngine.updateProgress();
+            }
+        });
+
+        // Add state to browser history when changing steps
+        const originalNextStep = TaxiCCOEngine.nextStep;
+        const originalPrevStep = TaxiCCOEngine.prevStep;
+
+        TaxiCCOEngine.nextStep = function () {
+            const result = originalNextStep.call(this);
+            if (history.pushState) {
+                history.pushState({ step: this.currentStep }, '', `#step-${this.currentStep}`);
+            }
+            return result;
+        };
+
+        TaxiCCOEngine.prevStep = function () {
+            const result = originalPrevStep.call(this);
+            if (history.pushState) {
+                history.pushState({ step: this.currentStep }, '', `#step-${this.currentStep}`);
+            }
+            return result;
+        };
+    </script>
+</body>
+
+</html>
