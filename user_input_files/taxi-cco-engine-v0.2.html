@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taxi CCO Engine - Générateur de Prompts Marketing</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --success: #4cc9f0;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+    }
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .logo h1 span {
+      color: var(--primary);
+      font-weight: 400;
+    }
+    .logo p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 3px;
+    }
+    .stats {
+      display: flex;
+      gap: 15px;
+    }
+    .stats span {
+      background: var(--light-gray);
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tabs {
+      display: flex;
+      background: white;
+      border-bottom: 1px solid var(--light-gray);
+      margin-top: 10px;
+    }
+    .tab {
+      padding: 15px 25px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      color: var(--gray);
+    }
+    .tab.active {
+      color: var(--primary);
+    }
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+    .tab-content {
+      display: none;
+      padding: 30px 0;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .section-title {
+      font-size: 1.4rem;
+      margin-bottom: 25px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title i {
+      color: var(--primary);
+    }
+    /* Parameter Selection */
+    .parameter-flow {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 30px;
+    }
+    .flow-steps {
+      display: flex;
+      background: var(--light);
+      padding: 15px;
+    }
+    .flow-step-header {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: var(--transition);
+      position: relative;
+      font-weight: 500;
+    }
+    .flow-step-header.active {
+      color: white;
+      background: var(--primary);
+    }
+    .flow-step-header::after {
+      content: '→';
+      position: absolute;
+      right: -10px;
+      color: var(--light-gray);
+    }
+    .flow-step-header:last-child::after {
+      display: none;
+    }
+    .step-content {
+      padding: 25px;
+    }
+    .parameter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .parameter-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 2px solid transparent;
+      box-shadow: var(--card-shadow);
+    }
+    .parameter-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .parameter-card.selected {
+      border-color: var(--primary);
+      background: rgba(67, 97, 238, 0.05);
+      position: relative;
+    }
+    .parameter-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--primary);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+    .parameter-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(67, 97, 238, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+    .parameter-card h4 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      color: var(--dark);
+    }
+    .parameter-card p {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+    .mascot-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .mascot-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+    .mascot-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .mascot-card.selected {
+      border-color: var(--primary);
+    }
+    .mascot-header {
+      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .mascot-icon {
+      font-size: 2rem;
+    }
+    .mascot-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .mascot-desc {
+      padding: 15px 20px;
+      font-size: 0.95rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+    .parameter-summary {
+      background: rgba(67, 97, 238, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 25px;
+      display: none;
+    }
+    .summary-item {
+      display: flex;
+      margin-bottom: 8px;
+    }
+    .summary-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: var(--primary);
+    }
+    /* Prompt Results */
+    .prompt-container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    .prompt-header {
+      background: var(--primary);
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .prompt-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .prompt-textarea {
+      width: 100%;
+      min-height: 250px;
+      padding: 20px;
+      border: none;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      resize: vertical;
+      background: #fafbff;
+      color: var(--dark);
+    }
+    .prompt-textarea:focus {
+      outline: none;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      padding: 15px 25px;
+      background: var(--light);
+      border-top: 1px solid var(--light-gray);
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      font-size: 0.95rem;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    .btn-secondary {
+      background: white;
+      color: var(--dark);
+      border: 1px solid var(--light-gray);
+    }
+    .btn-secondary:hover {
+      background: var(--light);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.05);
+    }
+    .prompt-preview {
+      background: rgba(67, 97, 238, 0.05);
+      border-radius: 0 0 16px 16px;
+      padding: 15px 25px;
+    }
+    .preview-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+    .preview-content {
+      line-height: 1.6;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+    /* Templates Section */
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    .template-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .template-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .template-icon {
+      height: 120px;
+      background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+    }
+    .template-content {
+      padding: 20px;
+    }
+    .template-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    .template-description {
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    /* Notification */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--dark);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 1000;
+      max-width: 350px;
+    }
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .notification.success {
+      background: #28a745;
+    }
+    .notification.warning {
+      background: #ffc107;
+      color: var(--dark);
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .parameter-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      .templates-grid {
+        grid-template-columns: 1fr;
+      }
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      .stats {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .flow-steps {
+        flex-direction: column;
+      }
+      .flow-step-header::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">T</div>
+          <div>
+            <h1>Taxi CCO Engine <span>v0.3</span></h1>
+            <p>Générateur de prompts marketing spécialisés pour les professionnels du transport</p>
+          </div>
+        </div>
+        <div class="stats">
+          <span><i class="fas fa-bolt"></i> <span id="promptCount">0</span> prompts générés</span>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" data-tab="parameters">Configurer le Prompt</div>
+        <div class="tab" data-tab="templates">Templates Professionnels</div>
+        <div class="tab" data-tab="results">Résultat & Export</div>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <!-- Parameter Selection Tab -->
+    <div id="parameters" class="tab-content active">
+      <h2 class="section-title"><i class="fas fa-sliders-h"></i> Configurez votre Prompt Marketing</h2>
+      <p style="margin-bottom: 25px; color: var(--gray);">Sélectionnez vos paramètres pour générer un prompt marketing personnalisé pour vos services de taxi</p>
+      <div class="parameter-flow">
+        <div class="flow-steps">
+          <div class="flow-step-header active" data-step="1">Plateforme</div>
+          <div class="flow-step-header" data-step="2">Objectif</div>
+          <div class="flow-step-header" data-step="3">Public Cible</div>
+          <div class="flow-step-header" data-step="4">Type de Contenu</div>
+          <div class="flow-step-header" data-step="5">Assistant IA</div>
+        </div>
+        <div class="step-content">
+          <!-- Step 1: Platform -->
+          <div class="flow-step step-1 active">
+            <h3>Sur quelle plateforme souhaitez-vous publier ?</h3>
+            <p style="color: var(--gray); margin-bottom: 20px;">Sélectionnez la plateforme principale pour votre contenu</p>
+            <div class="parameter-grid">
+              <div class="parameter-card" data-param="platform" data-value="instagram">
+                <div class="parameter-icon"><i class="fab fa-instagram"></i></div>
+                <h4>Plateforme</h4>
+                <p>Instagram</p>
+              </div>
+              <div class="parameter-card" data-param="platform" data-value="facebook">
+                <div class="parameter-icon"><i class="fab fa-facebook"></i></div>
+                <h4>Plateforme</h4>
+                <p>Facebook</p>
+              </div>
+              <div class="parameter-card" data-param="platform" data-value="tiktok">
+                <div class="parameter-icon"><i class="fab fa-tiktok"></i></div>
+                <h4>Plateforme</h4>
+                <p>TikTok</p>
+              </div>
+              <div class="parameter-card" data-param="platform" data-value="linkedin">
+                <div class="parameter-icon"><i class="fab fa-linkedin"></i></div>
+                <h4>Plateforme</h4>
+                <p>LinkedIn</p>
+              </div>
+              <div class="parameter-card" data-param="platform" data-value="twitter">
+                <div class="parameter-icon"><i class="fab fa-twitter"></i></div>
+                <h4>Plateforme</h4>
+                <p>Twitter/X</p>
+              </div>
+              <div class="parameter-card" data-param="platform" data-value="email">
+                <div class="parameter-icon"><i class="fas fa-envelope"></i></div>
+                <h4>Plateforme</h4>
+                <p>Email Marketing</p>
+              </div>
+            </div>
+          </div>
+          <!-- Step 2: Objective -->
+          <div class="flow-step step-2">
+            <h3>Quel est votre objectif principal ?</h3>
+            <p style="color: var(--gray); margin-bottom: 20px;">Sélectionnez l'objectif principal de votre campagne</p>
+            <div class="parameter-grid">
+              <div class="parameter-card" data-param="objective" data-value="awareness">
+                <div class="parameter-icon"><i class="fas fa-bullhorn"></i></div>
+                <h4>Objectif</h4>
+                <p>Notoriété</p>
+              </div>
+              <div class="parameter-card" data-param="objective" data-value="engagement">
+                <div class="parameter-icon"><i class="fas fa-comments"></i></div>
+                <h4>Objectif</h4>
+                <p>Engagement</p>
+              </div>
+              <div class="parameter-card" data-param="objective" data-value="conversion">
+                <div class="parameter-icon"><i class="fas fa-shopping-cart"></i></div>
+                <h4>Objectif</h4>
+                <p>Conversion</p>
+              </div>
+              <div class="parameter-card" data-param="objective" data-value="loyalty">
+                <div class="parameter-icon"><i class="fas fa-heart"></i></div>
+                <h4>Objectif</h4>
+                <p>Fidélisation</p>
+              </div>
+              <div class="parameter-card" data-param="objective" data-value="crisis">
+                <div class="parameter-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h4>Objectif</h4>
+                <p>Communication de crise</p>
+              </div>
+              <div class="parameter-card" data-param="objective" data-value="image">
+                <div class="parameter-icon"><i class="fas fa-building"></i></div>
+                <h4>Objectif</h4>
+                <p>Image de marque</p>
+              </div>
+            </div>
+          </div>
+          <!-- Step 3: Target Audience -->
+          <div class="flow-step step-3">
+            <h3>À qui souhaitez-vous parler ?</h3>
+            <p style="color: var(--gray); margin-bottom: 20px;">Sélectionnez votre public cible principal</p>
+            <div class="parameter-grid">
+              <div class="parameter-card" data-param="audience" data-value="tourists">
+                <div class="parameter-icon"><i class="fas fa-plane"></i></div>
+                <h4>Public</h4>
+                <p>Touristes</p>
+              </div>
+              <div class="parameter-card" data-param="audience" data-value="professionals">
+                <div class="parameter-icon"><i class="fas fa-briefcase"></i></div>
+                <h4>Public</h4>
+                <p>Professionnels</p>
+              </div>
+              <div class="parameter-card" data-param="audience" data-value="locals">
+                <div class="parameter-icon"><i class="fas fa-home"></i></div>
+                <h4>Public</h4>
+                <p>Locaux</p>
+              </div>
+              <div class="parameter-card" data-param="audience" data-value="events">
+                <div class="parameter-icon"><i class="fas fa-glass-cheers"></i></div>
+                <h4>Public</h4>
+                <p>Événements</p>
+              </div>
+              <div class="parameter-card" data-param="audience" data-value="airports">
+                <div class="parameter-icon"><i class="fas fa-plane-departure"></i></div>
+                <h4>Public</h4>
+                <p>Aéroports</p>
+              </div>
+              <div class="parameter-card" data-param="audience" data-value="hotels">
+                <div class="parameter-icon"><i class="fas fa-hotel"></i></div>
+                <h4>Public</h4>
+                <p>Hôtels</p>
+              </div>
+            </div>
+          </div>
+          <!-- Step 4: Content Type -->
+          <div class="flow-step step-4">
+            <h3>Quel type de contenu souhaitez-vous créer ?</h3>
+            <p style="color: var(--gray); margin-bottom: 20px;">Sélectionnez le format de contenu souhaité</p>
+            <div class="parameter-grid">
+              <div class="parameter-card" data-param="content-type" data-value="post">
+                <div class="parameter-icon"><i class="fas fa-hashtag"></i></div>
+                <h4>Contenu</h4>
+                <p>Post Réseaux Sociaux</p>
+              </div>
+              <div class="parameter-card" data-param="content-type" data-value="story">
+                <div class="parameter-icon"><i class="fab fa-instagram"></i></div>
+                <h4>Contenu</h4>
+                <p>Story Instagram</p>
+              </div>
+              <div class="parameter-card" data-param="content-type" data-value="video">
+                <div class="parameter-icon"><i class="fas fa-video"></i></div>
+                <h4>Contenu</h4>
+                <p>Vidéo Courte</p>
+              </div>
+              <div class="parameter-card" data-param="content-type" data-value="response">
+                <div class="parameter-icon"><i class="fas fa-reply"></i></div>
+                <h4>Contenu</h4>
+                <p>Réponse à un avis</p>
+              </div>
+              <div class="parameter-card" data-param="content-type" data-value="image">
+                <div class="parameter-icon"><i class="fas fa-image"></i></div>
+                <h4>Contenu</h4>
+                <p>Génération d'image</p>
+              </div>
+              <div class="parameter-card" data-param="content-type" data-value="campaign">
+                <div class="parameter-icon"><i class="fas fa-rocket"></i></div>
+                <h4>Contenu</h4>
+                <p>Campagne Complète</p>
+              </div>
+            </div>
+          </div>
+          <!-- Step 5: AI Assistant -->
+          <div class="flow-step step-5">
+            <h3>Choisissez votre assistant IA</h3>
+            <p style="color: var(--gray); margin-bottom: 20px;">Sélectionnez le type d'expertise que vous souhaitez pour votre prompt</p>
+            <div class="mascot-selection">
+              <div class="mascot-card selected" data-mascot="strategist">
+                <div class="mascot-header" style="background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);">
+                  <div class="mascot-icon"><i class="fas fa-chess-knight"></i></div>
+                  <div class="mascot-title">Stratège Marketing</div>
+                </div>
+                <div class="mascot-desc">
+                  Approche stratégique et vision à long terme. Analyse des tendances, alignement avec les objectifs business et optimisation des KPIs.
+                </div>
+              </div>
+              <div class="mascot-card" data-mascot="creative">
+                <div class="mascot-header" style="background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);">
+                  <div class="mascot-icon"><i class="fas fa-paint-brush"></i></div>
+                  <div class="mascot-title">Créatif Visionnaire</div>
+                </div>
+                <div class="mascot-desc">
+                  Approche créative et innovante. Idées originales, storytelling captivant et concepts visuels percutants.
+                </div>
+              </div>
+              <div class="mascot-card" data-mascot="practical">
+                <div class="mascot-header" style="background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);">
+                  <div class="mascot-icon"><i class="fas fa-tools"></i></div>
+                  <div class="mascot-title">Spécialiste Pratique</div>
+                </div>
+                <div class="mascot-desc">
+                  Approche pragmatique et immédiate. Conseils concrets, astuces réalisables et solutions rapides avec des outils gratuits.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="parameter-summary" id="parameterSummary">
+            <h4><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i>Vos paramètres sélectionnés :</h4>
+            <div class="summary-item">
+              <span class="summary-label">Plateforme :</span>
+              <span class="summary-value" id="summary-platform">Non sélectionnée</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Objectif :</span>
+              <span class="summary-value" id="summary-objective">Non sélectionné</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Public cible :</span>
+              <span class="summary-value" id="summary-audience">Non sélectionné</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Type de contenu :</span>
+              <span class="summary-value" id="summary-content-type">Non sélectionné</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Assistant IA :</span>
+              <span class="summary-value" id="summary-mascot">Stratège Marketing</span>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+            <button id="prevStep" class="btn btn-secondary">
+              <i class="fas fa-arrow-left"></i> Étape précédente
+            </button>
+            <button id="nextStep" class="btn btn-primary">
+              Étape suivante <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Templates Tab -->
+    <div id="templates" class="tab-content">
+      <h2 class="section-title"><i class="fas fa-layer-group"></i> Templates Professionnels Prédéfinis</h2>
+      <p style="margin-bottom: 25px; color: var(--gray);">Découvrez nos templates professionnels spécialement conçus pour les services de taxi</p>
+      <div class="templates-grid">
+        <div class="template-card" data-template="quick-idea">
+          <div class="template-icon" style="background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="template-content">
+            <h3 class="template-title">Idée Post Express</h3>
+            <p class="template-description">Générez une idée de post originale et engageante en 30 secondes avec les insights 2025</p>
+          </div>
+        </div>
+        <div class="template-card" data-template="quick-response">
+          <div class="template-icon" style="background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);">
+            <i class="fas fa-reply"></i>
+          </div>
+          <div class="template-content">
+            <h3 class="template-title">Réponse Avis Client</h3>
+            <p class="template-description">Répondez professionnellement à un avis avec empathie et stratégie de fidélisation</p>
+          </div>
+        </div>
+        <div class="template-card" data-template="quick-urgent">
+          <div class="template-icon" style="background: linear-gradient(135deg, #f8961e 0%, #f3722c 100%);">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="template-content">
+            <h3 class="template-title">Communication Urgente</h3>
+            <p class="template-description">Créez une communication de crise ou offre spéciale urgente avec les bonnes pratiques</p>
+          </div>
+        </div>
+        <div class="template-card" data-template="quick-story">
+          <div class="template-icon" style="background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);">
+            <i class="fab fa-instagram"></i>
+          </div>
+          <div class="template-content">
+            <h3 class="template-title">Story Interactive</h3>
+            <p class="template-description">Concept de Story Instagram avec éléments interactifs et storytelling captivant</p>
+          </div>
+        </div>
+        <div class="template-card" data-template="create-campaign">
+          <div class="template-icon" style="background: linear-gradient(135deg, #9d4edd 0%, #7209b7 100%);">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <div class="template-content">
+            <h3 class="template-title">Campagne Complète</h3>
+            <p class="template-description">Campagne multi-plateforme avec storytelling authentique et mesure d'impact</p>
+          </div>
+        </div>
+        <div class="template-card" data-template="create-image">
+          <div class="template-icon" style="background: linear-gradient(135deg, #2ec4b6 0%, #1a936f 100%);">
+            <i class="fas fa-image"></i>
+          </div>
+          <div class="template-content">
+            <h3 class="template-title">Génération d'Image</h3>
+            <p class="template-description">Créez des prompts détaillés pour générer des images marketing percutantes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Results Tab -->
+    <div id="results" class="tab-content">
+      <h2 class="section-title"><i class="fas fa-magic"></i> Résultat & Export</h2>
+      <p style="margin-bottom: 25px; color: var(--gray);">Votre prompt généré avec la knowledge base Social Media 2025</p>
+      <div class="prompt-container">
+        <div class="prompt-header">
+          <div class="prompt-title">Prompt Généré</div>
+          <div><span class="mascot-indicator" id="mascotIndicator"><i class="fas fa-chess-knight"></i> Stratège Marketing</span></div>
+        </div>
+        <textarea id="generatedPrompt" class="prompt-textarea" placeholder="Votre prompt généré avec la knowledge base Social Media 2025 apparaîtra ici...Choisissez une action ou un template pour commencer."></textarea>
+        <div class="action-buttons">
+          <button id="copyBtn" class="btn btn-primary"><i class="fas fa-copy"></i> Copier le Prompt</button>
+          <button id="chatgptBtn" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Ouvrir ChatGPT</button>
+          <button id="regenerateBtn" class="btn btn-outline"><i class="fas fa-redo"></i> Régénérer</button>
+        </div>
+        <div class="prompt-preview" style="display: none;" id="promptPreview">
+          <h3 class="preview-title"><i class="fas fa-eye"></i> Aperçu du Prompt</h3>
+          <div class="preview-content" id="previewContent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="notification" id="notification">Notification message</div>
+  <script>
+    // État global de l'application
+    const appState = {
+      currentStep: 1,
+      maxSteps: 5,
+      selectedParameters: {
+        platform: null,
+        objective: null,
+        'content-type': null,
+        audience: null,
+        mascot: 'strategist'
+      },
+      promptCount: 0
+    };
+    
+    // Fonction pour obtenir le nom des paramètres
+    function getParameterName(type, value) {
+      const names = {
+        platform: {
+          'instagram': 'Instagram',
+          'facebook': 'Facebook',
+          'tiktok': 'TikTok',
+          'linkedin': 'LinkedIn',
+          'twitter': 'Twitter/X',
+          'email': 'Email Marketing'
+        },
+        objective: {
+          'awareness': 'Notoriété',
+          'engagement': 'Engagement',
+          'conversion': 'Conversion',
+          'loyalty': 'Fidélisation',
+          'crisis': 'Communication de crise',
+          'image': 'Image de marque'
+        },
+        'content-type': {
+          'post': 'Post Réseaux Sociaux',
+          'story': 'Story Instagram',
+          'video': 'Vidéo Courte',
+          'response': 'Réponse à un avis',
+          'image': 'Génération d\'image',
+          'campaign': 'Campagne Complète'
+        },
+        audience: {
+          'tourists': 'Touristes',
+          'professionals': 'Professionnels',
+          'locals': 'Locaux',
+          'events': 'Événements',
+          'airports': 'Aéroports',
+          'hotels': 'Hôtels'
+        },
+        mascot: {
+          'strategist': 'Stratège Marketing',
+          'creative': 'Créatif Visionnaire',
+          'practical': 'Spécialiste Pratique'
+        }
+      };
+      return names[type] && names[type][value] ? names[type][value] : value;
+    }
+    
+    // Templates de prompts enrichis avec la knowledge base 2025
+    const promptTemplates = {
+      'quick-idea': {
+        title: 'Idée Post Express',
+        prompt: {
+          strategist: `🚀 En tant que Stratège Marketing Expert pour les services de taxi :
+🎯 OBJECTIF : Générer une idée de post originale et percutante
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- 82% des vidéos mobiles regardées sans son → privilégier visuels forts et sous-titres
+- Les contenus "bruts" augmentent le taux de partage de 4.2x vs contenus "corporate"
+- Les Reels ont 42% plus de portée que les vidéos Feed (Meta 2024)
+💡 INSTRUCTIONS :
+1. Analyser les tendances actuelles et anticiper les besoins futurs
+2. Proposer une idée de post stratégique avec un hook accrocheur
+3. Détailler le format visuel/vidéo et le ton à utiliser
+4. Expliquer pourquoi cette idée fonctionnera selon les insights 2025
+⏳ RÉSULTAT ATTENDU : Une idée de post clé en main, prête à être produite en moins de 30 minutes`,
+          creative: `🎨 En tant que Créatif Visionnaire pour les services de taxi :
+🎯 OBJECTIF : Générer une idée de post originale et percutante
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- 82% des vidéos mobiles regardées sans son → privilégier visuels forts et sous-titres
+- Les contenus "bruts" augmentent le taux de partage de 4.2x vs contenus "corporate"
+- Les Reels ont 42% plus de portée que les vidéos Feed (Meta 2024)
+💡 INSTRUCTIONS :
+1. Laisser libre cours à votre créativité et proposer une idée innovante
+2. Décrire un concept visuel captivant avec un hook accrocheur
+3. Suggérer des éléments graphiques, couleurs et typographies
+4. Expliquer comment cette idée va capter l'attention en 3 secondes
+⏳ RÉSULTAT ATTENDU : Une idée de post créative et engageante, facile à produire`,
+          practical: `🔧 En tant que Spécialiste Pratique pour les services de taxi :
+🎯 OBJECTIF : Générer une idée de post originale et percutante
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- 82% des vidéos mobiles regardées sans son → privilégier visuels forts et sous-titres
+- Les contenus "bruts" augmentent le taux de partage de 4.2x vs contenus "corporate"
+- Les Reels ont 42% plus de portée que les vidéos Feed (Meta 2024)
+💡 INSTRUCTIONS :
+1. Proposer une idée de post simple et immédiatement applicable
+2. Détailler le format visuel/vidéo avec des outils gratuits (Canva, CapCut)
+3. Donner des conseils pratiques pour la réalisation pas à pas
+4. Indiquer le temps nécessaire pour créer ce contenu
+⏳ RÉSULTAT ATTENDU : Une idée de post clé en main, prête à être produite en moins de 30 minutes`
+        }
+      },
+      'quick-response': {
+        title: 'Réponse Avis Client',
+        prompt: {
+          strategist: `🚀 En tant que Stratège Marketing Expert pour les services de taxi :
+🎯 OBJECTIF : Répondre professionnellement à un avis client avec empathie et stratégie de fidélisation
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+- Type d'avis : [positif/négatif/neutre]
+- Plateforme : [Instagram/Facebook/Google]
+- Gravité : [faible/moyenne/élevée]
+🔍 STRATÉGIE 2025 :
+1. **EMPATHE REALISTE** (pas de formules toutes faites)
+   - Reconnaître spécifiquement ce que le client a mentionné
+   - Utiliser son prénom si disponible
+   - Montrer que vous avez vraiment lu son avis
+2. **SOLUTIONS PERSONNALISÉES** (pas de réponses copiées)
+   - Proposer une solution adaptée à sa situation spécifique
+   - Offrir un geste commercial pertinent (pas systématiquement le même)
+   - Expliquer les mesures prises pour éviter la récurrence
+3. **OPPORTUNITÉ DE TRANSFORMATION**
+   - Transformer un avis négatif en preuve sociale positive
+   - Inviter à poursuivre la conversation en privé si nécessaire
+   - Créer un récit de résolution qui inspire confiance
+💡 INSTRUCTIONS :
+1. Analyser le ton et le contenu de l'avis
+2. Déterminer le niveau d'urgence et de gravité
+3. Rédiger une réponse qui respecte les bonnes pratiques 2025
+4. Intégrer des éléments qui renforcent la confiance de tous les lecteurs
+⏳ RÉSULTAT ATTENDU : Une réponse qui transforme l'expérience client et renforce votre image de marque`,
+          creative: `🎨 En tant que Créatif Visionnaire pour les services de taxi :
+🎯 OBJECTIF : Répondre à un avis client avec une touche créative et mémorable
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+- Type d'avis : [positif/négatif/neutre]
+- Plateforme : [Instagram/Facebook/Google]
+- Gravité : [faible/moyenne/élevée]
+✨ TECHNIQUES CRÉATIVES 2025 :
+1. **HOOK ÉMOTIONNEL**
+   - Commencer par une accroche qui crée immédiatement un lien
+   - Utiliser une métaphore ou une analogie pertinente
+   - Ajouter une touche d'humour appropriée si possible
+2. **STORYTELLING MINIATURE**
+   - Créer une micro-histoire autour de la résolution
+   - Inclure des détails concrets qui rendent la réponse vivante
+   - Utiliser une structure narrative claire (problème → action → résolution)
+3. **ÉLÉMENT SURPRISE**
+   - Proposer quelque chose d'inattendu mais pertinent
+   - Ajouter une petite touche créative (dessin, GIF personnalisé, etc.)
+   - Créer un moment "mémorable" dans l'interaction
+💡 INSTRUCTIONS :
+1. Transformer la réponse standard en expérience mémorable
+2. Intégrer des éléments créatifs qui restent professionnels
+3. S'assurer que la créativité sert l'objectif de fidélisation
+4. Garder un équilibre entre originalité et professionnalisme
+⏳ RÉSULTAT ATTENDU : Une réponse qui se démarque et encourage le partage positif`,
+          practical: `🔧 En tant que Spécialiste Pratique pour les services de taxi :
+🎯 OBJECTIF : Répondre rapidement et efficacement à un avis client
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+- Type d'avis : [positif/négatif/neutre]
+- Plateforme : [Instagram/Facebook/Google]
+- Gravité : [faible/moyenne/élevée]
+🛠️ CHECKLIST PRATIQUE :
+1. **RÉPONSE RAPIDE** (dans les 24h)
+   - Temps max de rédaction : 5 minutes
+   - Structure prédéfinie mais personnalisable
+   - Éviter le jargon professionnel
+2. **SOLUTION IMMÉDIATE**
+   - Offrir une solution concrète en 1-2 phrases
+   - Proposer un contact direct (email/téléphone)
+   - Indiquer clairement les prochaines étapes
+3. **OUTILS À PORTÉ DE MAIN**
+   - Utiliser des templates modifiables
+   - Avoir une liste de gestes commerciaux rapides
+   - Connaître les limites de ce qu'on peut promettre
+💡 INSTRUCTIONS :
+1. Utiliser le template suivant :
+   "Bonjour [Prénom],
+   Merci d'avoir partagé votre expérience.
+   [Reconnaissance spécifique]
+   [Action corrective]
+   [Offre de solution]
+   [Signature professionnelle]"
+2. Adapter avec 1-2 éléments personnalisés
+3. Vérifier les fautes avant envoi
+4. Noter l'interaction dans votre système
+⏳ RÉSULTAT ATTENDU : Une réponse professionnelle en moins de 10 minutes, même pendant vos heures de pointe`,
+        }
+      },
+      'quick-story': {
+        title: 'Story IG/FB/TikTok',
+        prompt: {
+          strategist: `🚀 En tant que Stratège Marketing Expert pour les services de taxi :
+🎯 OBJECTIF : Créer une mini-série de stories engageantes
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- 75% des utilisateurs préfèrent les stories verticales 9:16
+- Les stories avec questions interactive ont 3.2x plus d'engagement
+- Le taux de complétion moyen est de 70% pour les stories < 15s
+🔍 STRATÉGIE 2025 :
+1. **CADRE ÉDITORIAL CLAIR**
+   - Définir un fil conducteur pour la série (3-5 stories)
+   - Structurer avec un hook en première story et CTA en dernière
+   - Prévoir des moments d'interaction à chaque étape
+2. **RYTHME ET DÉROULEMENT**
+   - Alterner entre émotion et information
+   - Prévoir des transitions fluides entre les stories
+   - Optimiser le timing pour maintenir l'attention
+3. **MESURE D'IMPACT**
+   - Intégrer des questions pour mesurer l'engagement
+   - Utiliser des sondages pour collecter des insights
+   - Prévoir un CTA clair avec suivi des conversions
+💡 INSTRUCTIONS :
+1. Définir le thème principal et le public cible
+2. Proposer un storyboard détaillé avec timing
+3. Expliquer les éléments graphiques et textuels
+4. Indiquer les bonnes pratiques pour chaque plateforme
+⏳ RÉSULTAT ATTENDU : Une mini-série de stories prête à être produite, avec un fil conducteur clair et des CTAs efficaces`,
+          creative: `🎨 En tant que Créatif Visionnaire pour les services de taxi :
+🎯 OBJECTIF : Créer 3 scripts de stories captivantes
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- 75% des utilisateurs préfèrent les stories verticales 9:16
+- Les stories avec questions interactive ont 3.2x plus d'engagement
+- Le taux de complétion moyen est de 70% pour les stories < 15s
+✨ CONCEPT CRÉATIF :
+1. **HOOK EN 1-2 SECONDES**
+   - Créer une accroche visuelle percutante
+   - Utiliser une question ou un défi intrigant
+   - Jouer avec les contrastes et les émotions
+2. **SCÈNES MÉMORABLES**
+   - Développer une micro-histoire en 3 actes
+   - Intégrer des éléments interactifs (questions, sondages)
+   - Utiliser des transitions créatives entre les stories
+3. **CTA INNOVANT**
+   - Proposer un CTA qui s'intègre naturellement à l'histoire
+   - Créer un sentiment d'urgence ou d'exclusivité
+   - Prévoir une récompense symbolique pour l'engagement
+💡 INSTRUCTIONS :
+1. Écrire 3 scripts de 15 secondes maximum
+2. Détailler le visuel, le texte et les éléments interactifs
+3. Suggérer des éléments graphiques et des animations
+4. Indiquer comment adapter le contenu à chaque plateforme
+⏳ RÉSULTAT ATTENDU : 3 scripts de stories créatives et engageantes, prêtes à être tournées`,
+          practical: `🔧 En tant que Spécialiste Pratique pour les services de taxi :
+🎯 OBJECTIF : Créer des stories rapidement et efficacement
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- 75% des utilisateurs préfèrent les stories verticales 9:16
+- Les stories avec questions interactive ont 3.2x plus d'engagement
+- Le taux de complétion moyen est de 70% pour les stories < 15s
+🛠️ CHECKLIST PRATIQUE :
+1. **PRÉPARATION RAPIDE**
+   - Liste des éléments nécessaires (smartphone, trépied, éclairage)
+   - Template Canva pré-défini pour le format story
+   - Texte overlay prêt avec police lisible
+2. **TOURNAGE EFFICACE**
+   - Plan de tournage en 3 étapes maximum
+   - Conseils pour les angles et la lumière naturelle
+   - Durée idéale par story (8-15 secondes)
+3. **ÉDITION RAPIDE**
+   - Utiliser CapCut pour les effets simples
+   - Ajouter des sous-titres automatiques
+   - Insérer des CTA clairs en fin de story
+💡 INSTRUCTIONS :
+1. Préparer un template Canva avec vos couleurs de marque
+2. Filmer 3 stories courtes avec un smartphone
+3. Ajouter des sous-titres et un CTA simple
+4. Publier et suivre les statistiques de base
+⏳ RÉSULTAT ATTENDU : Des stories professionnelles créées en moins de 20 minutes, avec un CTA clair et des éléments interactifs`,
+        }
+      },
+      'quick-video': {
+        title: 'Vidéo courte (UGC/Reel/TikTok/Short)',
+        prompt: {
+          strategist: `🚀 En tant que Stratège Marketing Expert pour les services de taxi :
+🎯 OBJECTIF : Créer une vidéo courte percutante
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les vidéos < 15s ont un taux de complétion de 85%
+- Les vidéos avec sous-titres ont 40% plus d'engagement
+- Le premier plan détermine 90% du taux de complétion
+🔍 STRATÉGIE 2025 :
+1. **CADRE ÉDITORIAL ET ANGLE**
+   - Définir un angle unique pour votre vidéo
+   - Structurer avec un hook en 0-3s, développement et CTA
+   - Intégrer des éléments de preuve sociale
+2. **FORMAT ET OPTIMISATION**
+   - Adapter le format à chaque plateforme (9:16 pour TikTok, 1:1 pour Feed)
+   - Optimiser pour le son désactivé (sous-titres, visuels forts)
+   - Prévoir des moments clés pour l'engagement
+3. **MESURE ET AMÉLIORATION**
+   - Définir des KPIs clés (taux de complétion, CTR)
+   - Planifier des A/B tests sur les hooks
+   - Analyser les moments de drop-off
+💡 INSTRUCTIONS :
+1. Définir l'objectif spécifique de la vidéo
+2. Proposer un storyboard détaillé avec timing
+3. Expliquer le format technique et les spécifications
+4. Indiquer comment mesurer le succès
+⏳ RÉSULTAT ATTENDU : Une vidéo courte optimisée pour chaque plateforme, avec un hook percutant et un CTA clair`,
+          creative: `🎨 En tant que Créatif Visionnaire pour les services de taxi :
+🎯 OBJECTIF : Écrire 3 scripts de vidéos courtes <30s
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les vidéos < 15s ont un taux de complétion de 85%
+- Les vidéos avec sous-titres ont 40% plus d'engagement
+- Le premier plan détermine 90% du taux de complétion
+✨ CONCEPT CRÉATIF :
+1. **HOOK IMMÉDIAT**
+   - Créer une accroche en 1-3 secondes qui capte l'attention
+   - Utiliser un contraste émotionnel ou visuel
+   - Poser une question intrigante dès le début
+2. **SCÉNARIO MINIMALISTE**
+   - Développer une histoire simple en 3 actes
+   - Utiliser des visuels parlants plutôt que du texte
+   - Intégrer des éléments de surprise ou d'humour
+3. **CTA MÉMORABLE**
+   - Créer un CTA qui s'intègre naturellement à l'histoire
+   - Utiliser un mot-clé ou une phrase accrocheuse
+   - Ajouter un élément interactif (défi, question)
+💡 INSTRUCTIONS :
+1. Écrire 3 scripts de 15-30 secondes maximum
+2. Détailler les plans, le rythme et les transitions
+3. Suggérer des éléments visuels et sonores
+4. Indiquer comment adapter à chaque plateforme
+⏳ RÉSULTAT ATTENDU : 3 concepts de vidéos courtes créatives, avec des hooks percutants et des CTAs efficaces`,
+          practical: `🔧 En tant que Spécialiste Pratique pour les services de taxi :
+🎯 OBJECTIF : Créer une vidéo courte rapidement avec des outils gratuits
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les vidéos < 15s ont un taux de complétion de 85%
+- Les vidéos avec sous-titres ont 40% plus d'engagement
+- Le premier plan détermine 90% du taux de complétion
+🛠️ CHECKLIST PRATIQUE :
+1. **PRÉPARATION RAPIDE**
+   - Liste des éléments nécessaires (smartphone, trépied, éclairage)
+   - Template Canva pour les textes à l'écran
+   - Script écrit en 5 points maximum
+2. **TOURNAGE EFFICACE**
+   - 3 plans maximum pour une vidéo de 15s
+   - Conseils pour la lumière naturelle et les angles
+   - Durée idéale par plan (3-5s)
+3. **ÉDITION RAPIDE**
+   - Utiliser CapCut pour le montage et les effets
+   - Ajouter des sous-titres automatiques
+   - Insérer un CTA clair en fin de vidéo
+💡 INSTRUCTIONS :
+1. Préparer un script simple en 5 points
+2. Filmer avec un smartphone en format vertical
+3. Utiliser CapCut pour le montage rapide
+4. Ajouter des sous-titres et un CTA
+⏳ RÉSULTAT ATTENDU : Une vidéo courte professionnelle créée en moins de 30 minutes avec des outils gratuits`,
+        }
+      },
+      'create-campaign': {
+        title: 'Mini-campagne',
+        prompt: {
+          strategist: `🚀 En tant que Stratège Marketing Expert pour les services de taxi :
+🎯 OBJECTIF : Planifier une mini-campagne marketing sur 1 semaine
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les campagnes multi-canaux ont 3x plus d'impact que les campagnes single-channel
+- Le meilleur moment pour publier varie selon la plateforme et le public
+- L'authenticité est le facteur n°1 de confiance pour les consommateurs
+🔍 STRATÉGIE 2025 :
+1. **PLANIFICATION STRATÉGIQUE**
+   - Définir des objectifs SMART clairs et mesurables
+   - Identifier les audiences cibles et leurs comportements
+   - Sélectionner les plateformes les plus pertinentes
+2. **CALENDRIER ÉDITORIAL**
+   - Structurer une séquence logique de contenus
+   - Prévoir des moments clés pour l'engagement
+   - Planifier des contenus réactifs aux tendances
+3. **MESURE ET OPTIMISATION**
+   - Définir des KPIs spécifiques à chaque objectif
+   - Mettre en place un système de suivi en temps réel
+   - Prévoir des points d'ajustement basés sur les données
+💡 INSTRUCTIONS :
+1. Définir les objectifs principaux de la campagne
+2. Identifier les audiences cibles et leurs besoins
+3. Proposer un calendrier détaillé J1-J7 avec formats variés
+4. Expliquer comment mesurer et optimiser les résultats
+⏳ RÉSULTAT ATTENDU : Un plan de campagne complet avec objectifs clairs, calendrier détaillé et métriques de succès`,
+          creative: `🎨 En tant que Créatif Visionnaire pour les services de taxi :
+🎯 OBJECTIF : Imaginer une série de contenus créatifs multi-formats
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les campagnes multi-canaux ont 3x plus d'impact que les campagnes single-channel
+- Le meilleur moment pour publier varie selon la plateforme et le public
+- L'authenticité est le facteur n°1 de confiance pour les consommateurs
+✨ CONCEPT CRÉATIF :
+1. **IDÉES DE CONTENUS**
+   - Proposer 7 concepts uniques pour 7 jours
+   - Créer un fil conducteur narratif entre les contenus
+   - Suggérer des formats variés (vidéo, image, texte)
+2. **SLOGANS ET MESSAGES**
+   - Créer des slogans percutants et mémorables
+   - Développer des messages clés adaptés à chaque format
+   - Intégrer des éléments de storytelling
+3. **ELEMENTS VISUELS**
+   - Proposer une palette de couleurs cohérente
+   - Suggérer des styles graphiques adaptés
+   - Indiquer les éléments à inclure dans chaque visuel
+💡 INSTRUCTIONS :
+1. Imaginer 7 idées de contenus pour 7 jours
+2. Décrire chaque concept avec détails créatifs
+3. Proposer des slogans et messages clés
+4. Suggérer des éléments visuels et graphiques
+⏳ RÉSULTAT ATTENDU : 7 concepts de contenus créatifs avec slogans et éléments visuels, prêts à être développés`,
+          practical: `🔧 En tant que Spécialiste Pratique pour les services de taxi :
+🎯 OBJECTIF : Mettre en place une mini-campagne en 7 jours avec des outils simples
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les campagnes multi-canaux ont 3x plus d'impact que les campagnes single-channel
+- Le meilleur moment pour publier varie selon la plateforme et le public
+- L'authenticité est le facteur n°1 de confiance pour les consommateurs
+🛠️ CHECKLIST PRATIQUE :
+1. **CALENDRIER J1-J7**
+   - J1: Préparation (assets, textes, planning)
+   - J2: Publication premier contenu + monitoring
+   - J3: Engagement avec les commentaires
+   - J4: Publication contenu principal
+   - J5: Analyse préliminaire + ajustements
+   - J6: Publication contenu réactif
+   - J7: Bilan et planification future
+2. **OUTILS À UTILISER**
+   - Canva pour les visuels
+   - CapCut pour les vidéos courtes
+   - Planificateur gratuit pour les publications
+3. **MÉTRIQUES DE SUCCÈS**
+   - Taux d'engagement (likes, commentaires, partages)
+   - Clics sur le CTA
+   - Conversions (réservations, contacts)
+💡 INSTRUCTIONS :
+1. Suivre le calendrier J1-J7 étape par étape
+2. Utiliser les outils gratuits recommandés
+3. Mesurer les métriques clés quotidiennement
+4. Ajuster la campagne en fonction des résultats
+⏳ RÉSULTAT ATTENDU : Une mini-campagne complète mise en place en 7 jours avec des outils gratuits et des résultats mesurables`,
+        }
+      },
+      'quick-urgent': {
+        title: 'Annonce urgente',
+        prompt: {
+          strategist: `🚀 En tant que Stratège Marketing Expert pour les services de taxi :
+🎯 OBJECTIF : Communiquer rapidement lors d'une situation urgente
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les messages urgents doivent être publiés dans les 2h pour un impact optimal
+- La transparence réduit de 65% les réactions négatives
+- Les formats courts (1-2 phrases) ont 3x plus de partages
+🔍 STRATÉGIE 2025 :
+1. **CADRE DE COMMUNICATION**
+   - Définir clairement le niveau d'urgence
+   - Identifier les canaux prioritaires
+   - Prévoir un message adapté à chaque public
+2. **CONTENU ET TON**
+   - Utiliser un ton calme et rassurant
+   - Fournir des informations précises et vérifiées
+   - Inclure des solutions ou alternatives
+3. **SUIVI ET GESTION**
+   - Mettre en place un système de monitoring en temps réel
+   - Prévoir des réponses types aux questions fréquentes
+   - Planifier des mises à jour régulières
+💡 INSTRUCTIONS :
+1. Analyser la situation et définir le niveau d'urgence
+2. Rédiger un message clair et concis adapté à chaque canal
+3. Déterminer le calendrier de publication et de suivi
+4. Préparer des réponses aux questions prévisibles
+⏳ RÉSULTAT ATTENDU : Un plan de communication urgent efficace avec messages clés et calendrier de diffusion`,
+          creative: `🎨 En tant que Créatif Visionnaire pour les services de taxi :
+🎯 OBJECTIF : Créer 3 messages courts percutants pour une situation urgente
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les messages urgents doivent être publiés dans les 2h pour un impact optimal
+- La transparence réduit de 65% les réactions négatives
+- Les formats courts (1-2 phrases) ont 3x plus de partages
+✨ CONCEPT CRÉATIF :
+1. **MESSAGE POST**
+   - Créer un message clair avec un visuel percutant
+   - Utiliser une formulation qui rassure tout en informant
+   - Inclure un CTA simple et direct
+2. **MESSAGE STORY**
+   - Développer une mini-story en 3 slides maximum
+   - Utiliser des éléments visuels qui renforcent le message
+   - Ajouter un sticker interactif pour les questions
+3. **MESSAGE DM**
+   - Rédiger un message personnalisé pour les clients concernés
+   - Utiliser un ton empathique et professionnel
+   - Proposer une solution concrète immédiatement
+💡 INSTRUCTIONS :
+1. Créer 3 versions adaptées à chaque canal (post, story, DM)
+2. Détailler le visuel, le texte et les éléments interactifs
+3. Suggérer des éléments graphiques et des animations
+4. Indiquer comment adapter le message à la situation
+⏳ RÉSULTAT ATTENDU : 3 messages courts et percutants, adaptés à chaque canal de communication`,
+          practical: `🔧 En tant que Spécialiste Pratique pour les services de taxi :
+🎯 OBJECTIF : Diffuser une annonce urgente rapidement et efficacement
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+📊 CONTEXTE KNOWLEDGE BASE 2025 :
+- Les messages urgents doivent être publiés dans les 2h pour un impact optimal
+- La transparence réduit de 65% les réactions négatives
+- Les formats courts (1-2 phrases) ont 3x plus de partages
+🛠️ CHECKLIST PRATIQUE :
+1. **DIFFUSION IMMÉDIATE**
+   - Canal prioritaire: [Facebook/Instagram/Twitter]
+   - Heure optimale: [matin/après-midi/soir]
+   - Durée de visibilité: [24h/48h/72h]
+2. **CONTENU PRÊT À L'EMPLOI**
+   - Message principal (1 phrase)
+   - Message détaillé (2-3 phrases)
+   - Réponses aux questions fréquentes (FAQ)
+3. **SUIVI RAPIDE**
+   - Assigner une personne pour le monitoring
+   - Prévoir des mises à jour toutes les [X] heures
+   - Identifier les signaux pour clore la communication
+💡 INSTRUCTIONS :
+1. Utiliser le template suivant :
+   "[Titre accrocheur]
+   [Message clair et concis]
+   [Action à entreprendre]
+   [Contact pour plus d'infos]"
+2. Adapter le message à chaque plateforme
+3. Publier immédiatement sur les canaux prioritaires
+4. Mettre en place un suivi horaire
+⏳ RÉSULTAT ATTENDU : Une annonce urgente diffusée en moins de 30 minutes avec un message clair et un suivi organisé`,
+        }
+      },
+      'create-image': {
+        title: 'Génération d\'Image',
+        prompt: {
+          strategist: `🚀 En tant que Stratège Marketing Expert pour les services de taxi :
+🎯 OBJECTIF : Créer un prompt détaillé pour générer une image marketing percutante
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+🔍 STRATÉGIE VISUELLE 2025 :
+1. **COMPOSITION STRATÉGIQUE**
+   - Positionnement des éléments pour guider le regard
+   - Utilisation de l'espace négatif pour améliorer la lisibilité
+   - Hiérarchie visuelle claire avec 1 seul point focal
+2. **PSYCHOLOGIE DES COULEURS**
+   - Palette adaptée au public cible et à l'émotion souhaitée
+   - Contraste optimal pour le format de la plateforme
+   - Harmonie avec l'identité visuelle de la marque
+3. **OPTIMISATION ALGORITHMIQUE**
+   - Dimensions parfaitement adaptées à [plateforme]
+   - Équilibre entre texte et visuel pour le taux d'engagement
+   - Éléments visuels qui fonctionnent même en miniature
+💡 INSTRUCTIONS :
+1. Décrire le sujet principal avec précision et détails
+2. Spécifier le style artistique (photographie, illustration, etc.)
+3. Définir l'ambiance émotionnelle à transmettre
+4. Indiquer les éléments clés à inclure et à éviter
+5. Préciser le format et les dimensions optimales
+✨ EXEMPLE :
+"Une photographie réaliste d'un taxi moderne en ville la nuit, avec des phares lumineux créant des reflets sur la chaussée mouillée. Style professionnel, ambiance chaleureuse et sécurisante. Inclure le logo de la compagnie discrètement sur la portière. Format carré 1080x1080px pour Instagram, avec espace réservé pour le texte en haut (20% de l'image). Éviter les éléments distrayants en arrière-plan."`,
+          creative: `🎨 En tant que Créatif Visionnaire pour les services de taxi :
+🎯 OBJECTIF : Imaginer une image marketing innovante et mémorable
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+🎨 CONCEPT CRÉATIF :
+- Style artistique : [style suggéré]
+- Palette de couleurs : [couleurs suggérées]
+- Éléments visuels clés : [éléments]
+- Ambiance émotionnelle : [émotion]
+💡 INSTRUCTIONS :
+1. Proposer un concept visuel original et mémorable
+2. Décrire les éléments graphiques de manière imaginative
+3. Suggérer des métaphores visuelles pertinentes
+4. Indiquer comment l'image peut susciter une émotion spécifique
+5. Ajouter des détails sur la composition et le cadrage
+✨ EXEMPLE :
+"Une illustration stylisée d'un taxi volant dans un ciel étoilé, symbolisant la rapidité et la modernité. Style semi-réaliste avec des touches de fantaisie, palette de bleus profonds et d'or. Le taxi laisse une traînée lumineuse formant le logo de la marque. L'image doit transmettre un sentiment d'innovation et de confiance. Format 1080x1920px pour les Stories, avec espace réservé pour un call-to-action en bas."`,
+          practical: `🔧 En tant que Spécialiste Pratique pour les services de taxi :
+🎯 OBJECTIF : Créer un prompt simple pour générer une image fonctionnelle
+📊 CONTEXTE :
+- Plateforme : [plateforme sélectionnée]
+- Public cible : [public cible sélectionné]
+- Message clé : [message principal]
+- Objectif : [objectif marketing]
+🛠️ CONSIGNES PRATIQUES :
+- Outils recommandés : [outils]
+- Temps estimé : [temps]
+- Budget : [budget]
+💡 INSTRUCTIONS :
+1. Décrire l'image de manière claire et concise
+2. Indiquer les éléments essentiels à inclure
+3. Suggérer des outils gratuits ou peu coûteux
+4. Donner des conseils pour l'adapter aux plateformes
+5. Proposer des alternatives en cas de difficultés
+✨ EXEMPLE :
+"Une photo simple d'un taxi devant une gare, avec un chauffeur souriant tenant une pancarte 'Bienvenue'. Utiliser Canva pour ajouter le texte 'Votre partenaire de voyage' en haut de l'image. Format 1080x1080px pour Instagram, 1200x628px pour Facebook. Si pas de photo disponible, utiliser une image libre de droits de placehold.co avec le texte approprié. Temps estimé: 15 minutes avec Canva."`
+        }
+      }
+    };
+    
+    // Fonction pour mettre à jour l'UI des étapes
+    function updateFlowUI() {
+      // Update step headers
+      document.querySelectorAll('.flow-step-header').forEach((header, index) => {
+        const stepNum = index + 1;
+        if (stepNum === appState.currentStep) {
+          header.classList.add('active');
+        } else {
+          header.classList.remove('active');
+        }
+      });
+      // Update step content visibility
+      document.querySelectorAll('.flow-step').forEach((step, index) => {
+        const stepNum = index + 1;
+        if (stepNum === appState.currentStep) {
+          step.classList.add('active');
+          step.style.display = 'block';
+        } else {
+          step.classList.remove('active');
+          step.style.display = 'none';
+        }
+      });
+      // Update navigation buttons
+      const prevBtn = document.getElementById('prevStep');
+      const nextBtn = document.getElementById('nextStep');
+      if (prevBtn) {
+        prevBtn.style.display = appState.currentStep === 1 ? 'none' : 'flex';
+      }
+      if (nextBtn) {
+        if (appState.currentStep === appState.maxSteps) {
+          nextBtn.innerHTML = '<i class="fas fa-magic"></i> Générer le Prompt';
+          nextBtn.onclick = generatePrompt;
+        } else {
+          nextBtn.innerHTML = 'Étape suivante <i class="fas fa-arrow-right"></i>';
+          nextBtn.onclick = nextStep;
+        }
+      }
+      // Update parameter summary
+      updateParameterSummary();
+    }
+    
+    // Fonction pour mettre à jour le résumé des paramètres
+    function updateParameterSummary() {
+      const summary = document.getElementById('parameterSummary');
+      const hasAllParameters = Object.values(appState.selectedParameters).every(value => value !== null);
+      if (hasAllParameters) {
+        summary.style.display = 'block';
+        // Update summary values
+        document.getElementById('summary-platform').textContent = 
+          getParameterName('platform', appState.selectedParameters.platform);
+        document.getElementById('summary-objective').textContent = 
+          getParameterName('objective', appState.selectedParameters.objective);
+        document.getElementById('summary-audience').textContent = 
+          getParameterName('audience', appState.selectedParameters.audience);
+        document.getElementById('summary-content-type').textContent = 
+          getParameterName('content-type', appState.selectedParameters['content-type']);
+        document.getElementById('summary-mascot').textContent = 
+          getParameterName('mascot', appState.selectedParameters.mascot);
+      } else {
+        summary.style.display = 'none';
+      }
+    }
+    
+    // Fonction pour naviguer à l'étape suivante
+    function nextStep() {
+      if (appState.currentStep < appState.maxSteps) {
+        appState.currentStep++;
+        updateFlowUI();
+      }
+    }
+    
+    // Fonction pour naviguer à l'étape précédente
+    function prevStep() {
+      if (appState.currentStep > 1) {
+        appState.currentStep--;
+        updateFlowUI();
+      }
+    }
+    
+    // Fonction pour générer un prompt
+    function generatePrompt() {
+      const { platform, objective, 'content-type': contentType, audience, mascot } = appState.selectedParameters;
+      if (!platform || !objective || !contentType || !audience) {
+        showNotification('Veuillez sélectionner tous les paramètres avant de générer le prompt', 'warning');
+        return;
+      }
+      
+      // Mapping type de contenu → template
+      const map = {
+        post: 'quick-idea',
+        story: 'quick-story',
+        video: 'quick-video',
+        response: 'quick-response',
+        image: 'create-image',
+        campaign: 'create-campaign'
+      };
+      const templateKey = map[contentType] || 'quick-idea';
+      
+      // Generate prompt based on content type
+      let promptText = '';
+      let promptTitle = '';
+      if (promptTemplates[templateKey]) {
+        const template = promptTemplates[templateKey];
+        promptTitle = template.title;
+        promptText = template.prompt[mascot] || template.prompt.strategist;
+        // Replace placeholders with actual values
+        promptText = promptText.replace(/\[plateforme sélectionnée\]/g, getParameterName('platform', platform));
+        promptText = promptText.replace(/\[public cible sélectionné\]/g, getParameterName('audience', audience));
+        promptText = promptText.replace(/\[objectif marketing\]/g, getParameterName('objective', objective));
+        promptText = promptText.replace(/\[message principal\]/g, 'Service de taxi professionnel et fiable');
+      } else {
+        // Default prompt generation
+        promptTitle = 'Prompt Marketing Personnalisé';
+        promptText = `Générer un contenu marketing pour ${getParameterName('platform', platform)} avec l'objectif ${getParameterName('objective', objective)} ciblant ${getParameterName('audience', audience)}. Le format est ${getParameterName('content-type', contentType)}.`;
+      }
+      
+      // Update the prompt textarea
+      const promptTextarea = document.getElementById('generatedPrompt');
+      if (promptTextarea) {
+        promptTextarea.value = promptText;
+      }
+      
+      // Update mascot indicator
+      const mascotIndicator = document.getElementById('mascotIndicator');
+      if (mascotIndicator) {
+        const mascotIcons = {
+          strategist: 'fas fa-chess-knight',
+          creative: 'fas fa-paint-brush',
+          practical: 'fas fa-tools'
+        };
+        mascotIndicator.innerHTML = `<i class="${mascotIcons[mascot]}"></i> ${getParameterName('mascot', mascot)}`;
+      }
+      
+      // Switch to results tab
+      switchTab('results');
+      
+      // Update stats
+      appState.promptCount++;
+      updateStats();
+      
+      // Show notification
+      showNotification('Prompt généré avec succès !', 'success');
+    }
+    
+    // Fonction pour changer d'onglet
+    function switchTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => {
+        if (tab.dataset.tab === tabName) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        if (content.id === tabName) {
+          content.classList.add('active');
+        } else {
+          content.classList.remove('active');
+        }
+      });
+    }
+    
+    // Fonction pour afficher une notification
+    function showNotification(message, type = 'info') {
+      const notification = document.getElementById('notification');
+      if (notification) {
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.add('show');
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
+    }
+    
+    // Fonction pour mettre à jour les statistiques
+    function updateStats() {
+      const promptCountElement = document.getElementById('promptCount');
+      if (promptCountElement) {
+        promptCountElement.textContent = appState.promptCount;
+      }
+    }
+    
+    // Fonction pour copier le prompt
+    function copyPrompt() {
+      const promptTextarea = document.getElementById('generatedPrompt');
+      if (promptTextarea && promptTextarea.value) {
+        promptTextarea.select();
+        document.execCommand('copy');
+        showNotification('Prompt copié dans le presse-papiers !', 'success');
+      } else {
+        showNotification('Aucun prompt à copier', 'warning');
+      }
+    }
+    
+    // Fonction pour ouvrir ChatGPT
+    function openChatGPT() {
+      const promptTextarea = document.getElementById('generatedPrompt');
+      if (promptTextarea && promptTextarea.value) {
+        const text = promptTextarea.value;
+        try {
+          navigator.clipboard.writeText(text).then(() => {
+            window.open('https://chat.openai.com/', '_blank');
+            showNotification("📋 Prompt copié. Ouvre ChatGPT et colle-le (Ctrl/Cmd+V).");
+          });
+        } catch(e) {
+          promptTextarea.focus();
+          promptTextarea.select();
+          document.execCommand('copy');
+          window.open('https://chat.openai.com/', '_blank');
+          showNotification("📋 Prompt copié. Ouvre ChatGPT et colle-le (Ctrl/Cmd+V).");
+        }
+      } else {
+        showNotification('Aucun prompt à envoyer à ChatGPT', 'warning');
+      }
+    }
+    
+    // Fonction pour régénérer le prompt
+    function regeneratePrompt() {
+      if (Object.values(appState.selectedParameters).some(value => value !== null)) {
+        generatePrompt();
+      } else {
+        showNotification('Veuillez d\'abord configurer vos paramètres', 'warning');
+      }
+    }
+    
+    // Fonction pour gérer la sélection des paramètres
+    function handleParameterSelection(paramType, value) {
+      appState.selectedParameters[paramType] = value;
+      // Update UI to show selection
+      document.querySelectorAll(`[data-param="${paramType}"]`).forEach(card => {
+        if (card.dataset.value === value) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+      updateParameterSummary();
+    }
+    
+    // Fonction pour gérer la sélection des mascottes
+    function handleMascotSelection(mascot) {
+      appState.selectedParameters.mascot = mascot;
+      // Update UI to show selection
+      document.querySelectorAll('.mascot-card').forEach(card => {
+        if (card.dataset.mascot === mascot) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+      updateParameterSummary();
+    }
+    
+    // Fonction pour gérer la sélection des templates
+    function handleTemplateSelection(template) {
+      if (promptTemplates[template]) {
+        const templateData = promptTemplates[template];
+        const mascot = appState.selectedParameters.mascot || 'strategist';
+        const promptText = templateData.prompt[mascot] || templateData.prompt.strategist;
+        const promptTextarea = document.getElementById('generatedPrompt');
+        if (promptTextarea) {
+          promptTextarea.value = promptText;
+        }
+        // Update mascot indicator
+        const mascotIndicator = document.getElementById('mascotIndicator');
+        if (mascotIndicator) {
+          const mascotIcons = {
+            strategist: 'fas fa-chess-knight',
+            creative: 'fas fa-paint-brush',
+            practical: 'fas fa-tools'
+          };
+          mascotIndicator.innerHTML = `<i class="${mascotIcons[mascot]}"></i> ${getParameterName('mascot', mascot)}`;
+        }
+        // Switch to results tab
+        switchTab('results');
+        // Update stats
+        appState.promptCount++;
+        updateStats();
+        // Show notification
+        showNotification(`Template "${templateData.title}" appliqué avec succès !`, 'success');
+      }
+    }
+    
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab switching
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          switchTab(this.dataset.tab);
+        });
+      });
+      // Parameter selection
+      document.querySelectorAll('.parameter-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const paramType = this.dataset.param;
+          const value = this.dataset.value;
+          handleParameterSelection(paramType, value);
+        });
+      });
+      // Mascot selection
+      document.querySelectorAll('.mascot-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const mascot = this.dataset.mascot;
+          handleMascotSelection(mascot);
+        });
+      });
+      // Template selection
+      document.querySelectorAll('.template-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const template = this.dataset.template;
+          handleTemplateSelection(template);
+        });
+      });
+      // Navigation buttons
+      const prevBtn = document.getElementById('prevStep');
+      const nextBtn = document.getElementById('nextStep');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', prevStep);
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', nextStep);
+      }
+      // Action buttons
+      const copyBtn = document.getElementById('copyBtn');
+      const chatgptBtn = document.getElementById('chatgptBtn');
+      const regenerateBtn = document.getElementById('regenerateBtn');
+      if (copyBtn) copyBtn.addEventListener('click', copyPrompt);
+      if (chatgptBtn) chatgptBtn.addEventListener('click', openChatGPT);
+      if (regenerateBtn) regenerateBtn.addEventListener('click', regeneratePrompt);
+      // Initialize UI
+      updateFlowUI();
+      updateStats();
+      // Show welcome message
+      setTimeout(() => {
+        showNotification('Bienvenue sur Taxi CCO Engine ! Commencez par configurer vos paramètres.', 'success');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

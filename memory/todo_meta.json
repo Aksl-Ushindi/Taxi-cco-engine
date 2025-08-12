@@ -1,0 +1,27 @@
+{
+  "todos": {
+    "Coordinator": {
+      "1": {
+        "id": "1",
+        "content": "Analyser l'application existante et l'audit complet",
+        "details": "• Comprendre les dysfonctionnements techniques identifiés\n• Analyser la KB taxi 2025 fournie\n• Identifier les gaps fonctionnels vs cahier des charges\n• Documenter l'architecture cible",
+        "status": "completed",
+        "priority": "high"
+      },
+      "2": {
+        "id": "2",
+        "content": "Concevoir l'architecture du nouveau système expert",
+        "details": "• Modèle de données JSON structuré pour prompts élite\n• Flow utilisateur gated avec validation par étapes\n• Interface ressources disponibles (URLs + checkbox)\n• Interface valeurs perçues (drivers transport Suisse)\n• Export double : prompt texte + JSON structuré\n• Cartographie et préparation de la KB 2025 (intégration via GPT)",
+        "status": "in_progress",
+        "priority": "high"
+      },
+      "3": {
+        "id": "3",
+        "content": "Développer le système expert HTML statique intégral",
+        "details": "• Corriger tous les bugs techniques (double binding, placeholders, navigation)\n• Implémenter navigation gated (1 clic = 1 étape, validation obligatoire)\n• Interface ergonomique & accessible (ARIA, navigation clavier)\n• Export JSON fidèle + prompt texte propre\n• Compteur précis (+1 uniquement après génération valide)\n• Templates sans placeholders bruts si champs remplis",
+        "status": "pending",
+        "priority": "high"
+      }
+    }
+  }
+}
