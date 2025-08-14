@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taxi CCO Engine - By Ushindi.io</title>
+    <title>Taxi CCO Engine 1.0 - By Ushindi.io</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
@@ -626,10 +626,6 @@
             z-index: 0;
         }
 
-        .btn-futuristic:hover::after {
-            left: 0;
-        }
-
         .btn-futuristic span {
             position: relative;
             z-index: 1;
@@ -647,13 +643,13 @@
                         <i class="fas fa-taxi"></i>
                     </div>
                     <div class="logo-text">
-                        <h1>Taxi CCO Engine</h1>
+                        <h1>Taxi CCO Engine 1.0</h1>
                         <p>By Ushindi.io</p>
                     </div>
                 </div>
                 <div class="stats">
                     <span><i class="fas fa-magic"></i> Prompts générés: <strong id="prompt-counter">0</strong></span>
-                    <span><i class="fas fa-clock"></i> Version 2025</span>
+                    <span><i class="fas fa-brain"></i> KB Version 2025</span>
                 </div>
             </div>
         </div>
@@ -724,7 +720,7 @@
                         <div class="selection-card" data-value="tiktok" data-type="platform">
                             <div class="card-icon"><i class="fab fa-tiktok"></i></div>
                             <h3>TikTok</h3>
-                            <p>Vidéos courtes virales ≤60s. Parfait pour toucher un public jeune avec du contenu
+                            <p>Vidéos courtes virales ≤ 60s. Parfait pour toucher un public jeune avec du contenu
                                 créatif.</p>
                         </div>
                         <div class="selection-card" data-value="linkedin" data-type="platform">
@@ -1197,7 +1193,7 @@
                         </div>
                         <div class="result-card">
                             <div class="result-header">
-                                <h3><i class="fas fa-code"></i> Configuration JSON</h3>
+                                <h3><i class="fas fa-code"></i> Configuration JSON Experte</h3>
                                 <button class="copy-btn" data-target="json-prompt">
                                     <i class="fas fa-copy"></i> Copier
                                 </button>
@@ -1223,16 +1219,72 @@
                         target="_blank" class="btn btn-futuristic"><span>TAXI CCO ENGINE</span></a>
                     </button>
                 </div>
-                <div style="margin-top: 30px;">
-                    <button class="btn btn-secondary" onclick="prevStep()">Retour</button>
-                </div>
             </div>
         </div>
         </div>
     </main>
 
     <script>
-        // Application State
+        // START OF NEW KNOWLEDGE-INFUSED LOGIC
+        const knowledgeBase = {
+            theories: {
+                algorithmic_affordance: {
+                    name: "Théorie de l'Affordance Algorithmique",
+                    summary: "Les algorithmes récompensent l'usage optimal des fonctionnalités natives d'une plateforme. Adapter le format au canal est crucial pour la visibilité.",
+                    source: "Bucher, 2018"
+                },
+                authenticity: {
+                    name: "Théorie de l'Authenticité Algorithmique / Paradoxe de la perfection",
+                    summary: "Dans une économie de l'attention saturée, les contenus perçus comme 'bruts' et authentiques génèrent plus de confiance et d'engagement que les productions trop lissées. L'imperfection humaine crée un lien.",
+                    source: "Brené Brown, 2010; Sprout Social, 2024"
+                },
+                social_identity: {
+                    name: "Théorie de l'Identité Sociale",
+                    summary: "Le Contenu Généré par les Utilisateurs (UGC) transforme les clients en ambassadeurs, renforçant le sentiment d'appartenance au groupe et la fidélité.",
+                    source: "Tajfel, 1979"
+                },
+                attention_economy: {
+                    name: "Économie de l'Attention Saturée",
+                    summary: "Face à une surcharge informationnelle, seuls les contenus qui créent un 'moment de vérité émotionnelle' (vulnérabilité, utilité, clarté) captent l'attention.",
+                    source: "Lanier, 2023"
+                }
+            },
+            platforms: {
+                instagram: { name: 'Instagram', format: '9:16 (1080x1920)', archetype: { format: "Reel + Carrousel", tonalite: "Inspiration visuelle", trigger: "Esthétique UX" }, heuristic: "Les Reels ont 42% plus de portée que les vidéos Feed. Les carrousels sont idéaux pour le contenu éducatif séquentiel." },
+                tiktok: { name: 'TikTok', format: '9:16 (1080x1920)', archetype: { format: "Micro-vidéo verticale", tonalite: "Émotion pure", trigger: "Son viral" }, heuristic: "Le hook (<3s) est critique pour le traitement sensoriel rapide. Le temps de visionnage complet est le KPI roi. L'authenticité prime." },
+                linkedin: { name: 'LinkedIn', format: 'Variable', archetype: { format: "Carrousel/textuel", tonalite: "Expertise actionable", trigger: "Data tangible" }, heuristic: "Les contenus de plus de 800 caractères génèrent +70% d'engagement. Idéal pour le B2B et le leadership éclairé." },
+                facebook: { name: 'Facebook', format: 'Variable', archetype: { format: "Vidéo, Live, Groupe", tonalite: "Communautaire, relationnel", trigger: "Connexion locale" }, heuristic: "Les groupes locaux ont un fort taux d'engagement. Le live shopping génère une hausse des ventes de +47%." },
+                youtube: { name: 'YouTube', format: 'Shorts 9:16, Long 16:9', archetype: { format: "Tutoriel, Démonstration", tonalite: "Éducatif, approfondi", trigger: "Résolution de problème" }, heuristic: "Deuxième moteur de recherche. Les 'Shorts' pour la notoriété rapide, les formats longs pour l'autorité et le SEO." },
+                twitter: { name: 'X (Twitter)', format: 'Texte + Média', archetype: { format: "Message court, Thread", tonalite: "Réactif, informatif", trigger: "Actualité" }, heuristic: "Idéal pour le service client en temps réel et les annonces rapides. La brièveté est clé." }
+            },
+            objectives: {
+                awareness: { name: 'Notoriété', definition: "Faire connaître le service. Le contenu doit être facile à partager et capter l'attention rapidement. S'appuyer sur la Théorie de l'Authenticité." },
+                engagement: { name: 'Engagement', definition: "Créer de l'interaction et fidéliser. Le contenu doit inciter aux commentaires et au partage (UGC). S'appuyer sur la Théorie de l'Identité Sociale." },
+                conversion: { name: 'Conversion', definition: "Générer des réservations. Le contenu doit être persuasif, clair et inclure un appel à l'action direct et simple." },
+                trust: { name: 'Confiance', definition: "Rassurer sur la qualité. Utiliser des preuves sociales (témoignages, avis) et mettre en avant la sécurité et le professionnalisme." },
+                education: { name: 'Éducation', definition: "Informer le client pour l'aider dans sa décision. Contenu pratique (tarifs, zones) et utile (conseils locaux)." },
+                recruitment: { name: 'Recrutement', definition: "Attirer de nouveaux chauffeurs. Mettre en avant les avantages, la culture d'entreprise et le potentiel de revenus." }
+            },
+            audiences: {
+                tourists: { name: 'Touristes', needs: "Recherchent un transport fiable vers des attractions. Sont sensibles aux visuels authentiques et aux conseils locaux. La transparence tarifaire est un facteur de confiance majeur.", source: "TAXI.txt" },
+                professionals: { name: 'Professionnels', needs: "Priorisent la ponctualité (critère décisif N°1), le confort et la discrétion. Ont besoin de factures claires et de fiabilité pour les transferts aéroport/gare.", source: "TAXI.txt" },
+                locals: { name: 'Résidents locaux', needs: "Recherchent un bon rapport qualité-prix, la courtoisie et la connaissance du terrain. La fidélité peut être développée via un service personnalisé.", source: "TAXI.txt" },
+                elderly: { name: 'Seniors', needs: "Privilégient la sécurité, l'assistance (aide avec les bagages) et la patience du chauffeur. Le contact humain est primordial.", source: "TAXI.txt" },
+                students: { name: 'Étudiants', needs: "Sont très sensibles au prix. Ciblent les trajets groupés, les services de nuit et les promotions spéciales.", source: "TAXI.txt" },
+                families: { name: 'Familles', needs: "La sécurité est la priorité absolue (sièges auto, conduite prudente). Ont besoin de véhicules spacieux.", source: "TAXI.txt" }
+            },
+            valueDrivers: {
+                'ponctualite': { name: 'Ponctualité', definition: 'Respect strict des horaires convenus. Seuil de satisfaction : ≤ 3 min de retard. Crucial pour le segment Business.' },
+                'securite': { name: 'Sécurité', definition: 'Conduite sûre, véhicules entretenus, chauffeurs agréés. Facteur de confiance fondamental pour tous les segments, surtout Familles et Seniors.' },
+                'prix-transparent': { name: 'Prix transparents', definition: 'Tarifs clairs annoncés à l\'avance, sans surprise. Très important pour les Touristes et les Locaux.' },
+                'confort': { name: 'Confort', definition: 'Véhicules récents, propres et climatisés. Facteur différenciant pour le segment Premium et Business.' },
+                'disponibilite': { name: 'Disponibilité 24/7', definition: 'Service accessible à toute heure. Attente critique pour le segment Urgence.' },
+                'local-knowledge': { name: 'Connaissance locale', definition: 'Expertise du chauffeur sur la région (raccourcis, conseils). Crée une forte valeur ajoutée pour les Touristes.' },
+                'convivialite': { name: 'Convivialité', definition: 'Accueil chaleureux, écoute et service humain. Facteur de fidélisation clé pour les Locaux et Seniors.' },
+                'ecologique': { name: 'Éco-responsable', definition: 'Démarche environnementale (véhicules hybrides/électriques). Argument de plus en plus important pour les entreprises et un segment de niche.' }
+            }
+        };
+
         const TaxiCCOEngine = {
             currentStep: 0,
             totalSteps: 8,
@@ -1251,14 +1303,12 @@
                 tone: 'professional'
             },
 
-            // Initialize the application
             init() {
                 this.bindEvents();
                 this.updateProgress();
                 this.loadState();
             },
 
-            // Load state from localStorage
             loadState() {
                 const saved = localStorage.getItem('taxi-cco-state');
                 if (saved) {
@@ -1272,234 +1322,114 @@
                 }
             },
 
-            // Save state to localStorage
             saveState() {
                 localStorage.setItem('taxi-cco-state', JSON.stringify(this.state));
             },
 
-            // Populate form fields with saved state
             populateFields() {
-                // Platform
-                if (this.state.platform) {
-                    this.selectCard(document.querySelector(`[data-value="${this.state.platform}"][data-type="platform"]`));
-                }
-
-                // Objective
-                if (this.state.objective) {
-                    this.selectCard(document.querySelector(`[data-value="${this.state.objective}"][data-type="objective"]`));
-                }
-
-                // Audience
-                if (this.state.audience) {
-                    this.selectCard(document.querySelector(`[data-value="${this.state.audience}"][data-type="audience"]`));
-                }
-
-                // Content Type
-                if (this.state.contentType) {
-                    this.selectCard(document.querySelector(`[data-value="${this.state.contentType}"][data-type="content"]`));
-                }
-
-                // Values
-                this.state.valueDrivers.forEach(value => {
-                    this.selectCard(document.querySelector(`[data-value="${value}"][data-type="value"]`));
-                });
-
-                // Tone
-                if (this.state.tone) {
-                    this.selectCard(document.querySelector(`[data-value="${this.state.tone}"][data-type="tone"]`));
-                }
-
-                // Text fields
+                if (this.state.platform) this.selectCard(document.querySelector(`[data-value="${this.state.platform}"][data-type="platform"]`));
+                if (this.state.objective) this.selectCard(document.querySelector(`[data-value="${this.state.objective}"][data-type="objective"]`));
+                if (this.state.audience) this.selectCard(document.querySelector(`[data-value="${this.state.audience}"][data-type="audience"]`));
+                if (this.state.contentType) this.selectCard(document.querySelector(`[data-value="${this.state.contentType}"][data-type="content"]`));
+                this.state.valueDrivers.forEach(value => this.selectCard(document.querySelector(`[data-value="${value}"][data-type="value"]`)));
+                if (this.state.tone) this.selectCard(document.querySelector(`[data-value="${this.state.tone}"][data-type="tone"]`));
                 if (this.state.mainMessage) document.getElementById('main-message').value = this.state.mainMessage;
                 if (this.state.companyName) document.getElementById('company-name').value = this.state.companyName;
                 if (this.state.location) document.getElementById('location').value = this.state.location;
                 if (this.state.existingVideos.length) document.getElementById('existing-videos').value = this.state.existingVideos.join('\n');
                 if (this.state.existingPhotos.length) document.getElementById('existing-photos').value = this.state.existingPhotos.join('\n');
-
-                // Checkboxes
                 this.state.contentToCreate.forEach(item => {
-                    const checkbox = document.querySelector(`[data-value="${item}"]`);
+                    const checkbox = document.querySelector(`[value="${item}"]`);
                     if (checkbox && checkbox.closest('.checkbox-item')) {
-                        this.toggleCheckbox(checkbox.closest('.checkbox-item'));
+                       if(!checkbox.checked) this.toggleCheckbox(checkbox.closest('.checkbox-item'));
                     }
                 });
+                 this.validateStep();
             },
 
-            // Bind all event listeners
             bindEvents() {
-                // Card selections
                 document.addEventListener('click', (e) => {
-                    if (e.target.closest('.selection-card')) {
-                        this.handleCardSelection(e.target.closest('.selection-card'));
-                    }
-
-                    if (e.target.closest('.checkbox-item')) {
-                        this.toggleCheckbox(e.target.closest('.checkbox-item'));
-                    }
-
-                    if (e.target.closest('.copy-btn')) {
-                        this.copyToClipboard(e.target.closest('.copy-btn'));
-                    }
+                    if (e.target.closest('.selection-card')) this.handleCardSelection(e.target.closest('.selection-card'));
+                    if (e.target.closest('.checkbox-item')) this.toggleCheckbox(e.target.closest('.checkbox-item'));
+                    if (e.target.closest('.copy-btn')) this.copyToClipboard(e.target.closest('.copy-btn'));
                 });
-
-                // Navigation buttons
-                document.getElementById('next-platform')?.addEventListener('click', () => this.nextStep());
-                document.getElementById('next-objective')?.addEventListener('click', () => this.nextStep());
-                document.getElementById('next-audience')?.addEventListener('click', () => this.nextStep());
-                document.getElementById('next-content')?.addEventListener('click', () => this.nextStep());
-                document.getElementById('next-resources')?.addEventListener('click', () => this.nextStep());
-                document.getElementById('next-values')?.addEventListener('click', () => this.nextStep());
+                document.querySelectorAll('[id^="next-"]').forEach(btn => btn.addEventListener('click', () => this.nextStep()));
+                document.querySelectorAll('[id^="prev-"]').forEach(btn => btn.addEventListener('click', () => this.prevStep()));
                 document.getElementById('generate-prompt')?.addEventListener('click', () => this.generatePrompts());
-
-                // Previous buttons
-                document.getElementById('prev-objective')?.addEventListener('click', () => this.prevStep());
-                document.getElementById('prev-audience')?.addEventListener('click', () => this.prevStep());
-                document.getElementById('prev-content')?.addEventListener('click', () => this.prevStep());
-                document.getElementById('prev-resources')?.addEventListener('click', () => this.prevStep());
-                document.getElementById('prev-values')?.addEventListener('click', () => this.prevStep());
-                document.getElementById('prev-message')?.addEventListener('click', () => this.prevStep());
-
-                // Restart button
                 document.getElementById('restart-flow')?.addEventListener('click', () => this.restart());
-
-                // Input changes
-                document.addEventListener('input', (e) => {
-                    if (e.target.id === 'existing-videos') {
-                        this.state.existingVideos = e.target.value.split('\n').filter(url => url.trim());
-                    }
-                    if (e.target.id === 'existing-photos') {
-                        this.state.existingPhotos = e.target.value.split('\n').filter(url => url.trim());
-                    }
-                    if (e.target.id === 'main-message') {
-                        this.state.mainMessage = e.target.value;
-                    }
-                    if (e.target.id === 'company-name') {
-                        this.state.companyName = e.target.value;
-                    }
-                    if (e.target.id === 'location') {
-                        this.state.location = e.target.value;
+                document.addEventListener('input', (e) => this.handleInput(e));
+            },
+            
+            handleInput(e) {
+                 const idMap = {
+                    'existing-videos': 'existingVideos',
+                    'existing-photos': 'existingPhotos',
+                    'main-message': 'mainMessage',
+                    'company-name': 'companyName',
+                    'location': 'location'
+                };
+                const stateKey = idMap[e.target.id];
+                if(stateKey) {
+                    if (['existingVideos', 'existingPhotos'].includes(stateKey)) {
+                         this.state[stateKey] = e.target.value.split('\n').filter(url => url.trim());
+                    } else {
+                        this.state[stateKey] = e.target.value;
                     }
                     this.saveState();
-                });
+                }
             },
 
-            // Handle card selection
             handleCardSelection(card) {
                 const type = card.dataset.type;
                 const value = card.dataset.value;
-
                 if (card.classList.contains('multiple')) {
-                    // Multiple selection (values)
-                    this.toggleCard(card);
-                    if (card.classList.contains('selected')) {
-                        if (!this.state.valueDrivers.includes(value)) {
-                            this.state.valueDrivers.push(value);
-                        }
-                    } else {
-                        this.state.valueDrivers = this.state.valueDrivers.filter(v => v !== value);
-                    }
+                    card.classList.toggle('selected');
+                    this.state.valueDrivers = Array.from(document.querySelectorAll('.selection-card.multiple.selected[data-type="value"]')).map(el => el.dataset.value);
                 } else {
-                    // Single selection
                     this.selectCard(card);
-                    this.state[type === 'platform' ? 'platform' :
-                        type === 'objective' ? 'objective' :
-                            type === 'audience' ? 'audience' :
-                                type === 'content' ? 'contentType' :
-                                    type === 'tone' ? 'tone' : type] = value;
+                    const typeMap = { platform: 'platform', objective: 'objective', audience: 'audience', content: 'contentType', tone: 'tone' };
+                    if(typeMap[type]) this.state[typeMap[type]] = value;
                 }
-
                 this.validateStep();
                 this.saveState();
             },
 
-            // Select a single card (deselects others of same type)
             selectCard(card) {
                 if (!card) return;
-
                 const type = card.dataset.type;
-                // Deselect other cards of the same type
-                document.querySelectorAll(`[data-type="${type}"]`).forEach(c => {
-                    c.classList.remove('selected');
-                });
-                // Select the clicked card
+                document.querySelectorAll(`.selection-card[data-type="${type}"]`).forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
             },
 
-            // Toggle card selection for multiple choice
-            toggleCard(card) {
-                card.classList.toggle('selected');
-            },
-
-            // Toggle checkbox
             toggleCheckbox(item) {
-                const checkbox = item.querySelector('input');
-                const value = checkbox.value;
-
                 item.classList.toggle('checked');
+                const checkbox = item.querySelector('input');
                 checkbox.checked = item.classList.contains('checked');
-
-                if (checkbox.checked) {
-                    if (!this.state.contentToCreate.includes(value)) {
-                        this.state.contentToCreate.push(value);
-                    }
-                } else {
-                    this.state.contentToCreate = this.state.contentToCreate.filter(v => v !== value);
-                }
-
+                this.state.contentToCreate = Array.from(document.querySelectorAll('.checkbox-item.checked input')).map(cb => cb.value);
                 this.saveState();
             },
 
-            // Validate current step
             validateStep() {
                 const currentStepElement = document.getElementById(`step-${this.currentStep}`);
+                if(!currentStepElement) return;
                 const errorElement = currentStepElement.querySelector('.error-message');
                 let isValid = false;
-
                 switch (this.currentStep) {
-                    case 0: // Platform
-                        isValid = this.state.platform !== null;
-                        break;
-                    case 1: // Objective
-                        isValid = this.state.objective !== null;
-                        break;
-                    case 2: // Audience
-                        isValid = this.state.audience !== null;
-                        break;
-                    case 3: // Content Type
-                        isValid = this.state.contentType !== null;
-                        break;
-                    case 4: // Resources (always valid)
-                        isValid = true;
-                        break;
-                    case 5: // Values
-                        isValid = this.state.valueDrivers.length > 0;
-                        break;
-                    case 6: // Message (always valid, can be empty)
-                        isValid = true;
-                        break;
-                    default:
-                        isValid = true;
+                    case 0: isValid = !!this.state.platform; break;
+                    case 1: isValid = !!this.state.objective; break;
+                    case 2: isValid = !!this.state.audience; break;
+                    case 3: isValid = !!this.state.contentType; break;
+                    case 4: isValid = true; break;
+                    case 5: isValid = this.state.valueDrivers.length > 0; break;
+                    case 6: isValid = true; break;
+                    default: isValid = true;
                 }
-
-                // Show/hide error message
-                if (errorElement) {
-                    if (isValid) {
-                        errorElement.classList.add('hidden');
-                    } else {
-                        errorElement.classList.remove('hidden');
-                    }
-                }
-
-                // Enable/disable next button
-                const nextButton = currentStepElement.querySelector('.btn-primary:not(#generate-prompt):not(#restart-flow)');
-                if (nextButton) {
-                    nextButton.disabled = !isValid;
-                }
-
+                if (errorElement) errorElement.classList.toggle('hidden', isValid);
+                const nextButton = currentStepElement.querySelector('.btn-primary:not(#generate-prompt)');
+                if (nextButton) nextButton.disabled = !isValid;
                 return isValid;
             },
 
-            // Navigate to next step
             nextStep() {
                 if (this.validateStep() && this.currentStep < this.totalSteps - 1) {
                     this.currentStep++;
@@ -1507,8 +1437,6 @@
                     this.updateProgress();
                 }
             },
-
-            // Navigate to previous step
             prevStep() {
                 if (this.currentStep > 0) {
                     this.currentStep--;
@@ -1516,18 +1444,10 @@
                     this.updateProgress();
                 }
             },
-
-            // Show current step
             showStep() {
-                document.querySelectorAll('.step-container').forEach((step, index) => {
-                    step.classList.toggle('active', index === this.currentStep);
-                });
-
-                // Scroll to top
+                document.querySelectorAll('.step-container').forEach((step, index) => step.classList.toggle('active', index === this.currentStep));
                 window.scrollTo(0, 0);
             },
-
-            // Update progress bar
             updateProgress() {
                 document.querySelectorAll('.progress-step').forEach((step, index) => {
                     step.classList.remove('active', 'completed');
@@ -1542,425 +1462,180 @@
                 });
             },
 
-            // Generate prompts
             generatePrompts() {
-                // Collect all input data
-                this.state.existingVideos = document.getElementById('existing-videos').value.split('\n').filter(url => url.trim());
-                this.state.existingPhotos = document.getElementById('existing-photos').value.split('\n').filter(url => url.trim());
-                this.state.mainMessage = document.getElementById('main-message').value;
-                this.state.companyName = document.getElementById('company-name').value;
-                this.state.location = document.getElementById('location').value;
+                this.handleInput({target: document.getElementById('main-message')});
+                this.handleInput({target: document.getElementById('company-name')});
+                this.handleInput({target: document.getElementById('location')});
 
-                // Generate text prompt
                 const textPrompt = this.generateTextPrompt();
                 document.getElementById('text-prompt').textContent = textPrompt;
-
-                // Generate JSON prompt
                 const jsonPrompt = this.generateJSONPrompt();
                 document.getElementById('json-prompt').textContent = JSON.stringify(jsonPrompt, null, 2);
-
-                // Update counter
                 this.updateCounter();
-
-                // Go to results step
                 this.nextStep();
-
                 this.saveState();
             },
 
-            // Generate text prompt
+            // ===== NEW PROMPT GENERATION LOGIC =====
+            getKnowledge(type, key) {
+                return knowledgeBase[type]?.[key] || null;
+            },
+
             generateTextPrompt() {
-                const platformData = this.getPlatformData();
-                const objectiveData = this.getObjectiveData();
-                const audienceData = this.getAudienceData();
-                const contentData = this.getContentData();
-                const toneData = this.getToneData();
+                const platformInfo = this.getKnowledge('platforms', this.state.platform);
+                const objectiveInfo = this.getKnowledge('objectives', this.state.objective);
+                const audienceInfo = this.getKnowledge('audiences', this.state.audience);
 
-                return `# Création de contenu ${contentData.name} pour ${platformData.name}
+                const valueDriverDetails = this.state.valueDrivers.map(v => {
+                    const vd = this.getKnowledge('valueDrivers', v);
+                    return `  - ${vd.name}: ${vd.definition}`;
+                }).join('\n');
 
-## Contexte entreprise
-Entreprise : ${this.state.companyName || 'Entreprise de taxi'}
-Localisation : ${this.state.location || 'Suisse'}
-Secteur : Transport de personnes - Taxi
+                const resourcesSummary = [
+                    this.state.existingVideos.length > 0 ? `Vidéos existantes (${this.state.existingVideos.length})` : null,
+                    this.state.existingPhotos.length > 0 ? `Photos existantes (${this.state.existingPhotos.length})` : null,
+                    this.state.contentToCreate.length > 0 ? `À créer: ${this.state.contentToCreate.join(', ')}` : "Aucune nouvelle ressource à créer."
+                ].filter(Boolean).join('\n');
 
-## Objectif de communication
-${objectiveData.description}
-Cible prioritaire : ${audienceData.description}
+                return `# ROLE ET OBJECTIF
+Tu es un expert en marketing de contenu et growth hacking, spécialisé dans le secteur des PME et plus particulièrement des services de transport. Ta mission est de générer un contenu ultra-pertinent en t'appuyant sur une base de connaissances métier et des théories marketing éprouvées.
 
-## Spécifications du contenu
-Format : ${contentData.name}
-Plateforme : ${platformData.name}
-${platformData.specs}
+# BASE DE CONNAISSANCES PERTINENTE (À UTILISER IMPÉRATIVEMENT)
+## Théories fondamentales
+- Théorie de l'Authenticité Algorithmique: Privilégie un ton "raw" et humain. Les audiences filtrent les contenus trop publicitaires. Le lien émotionnel prime sur la perfection technique.
+- Théorie de l'Affordance Algorithmique: Chaque plateforme a ses propres codes. Tu dois impérativement respecter les spécificités de la plateforme cible.
+- Économie de l'Attention: Le 'hook' (accroche) des 3 premières secondes est vital pour capter une attention limitée.
 
-## Message principal
-${this.state.mainMessage || 'Service de taxi professionnel, ponctuel et sécurisé pour tous vos déplacements.'}
+## Connaissances spécifiques au projet
+- Plateforme: ${platformInfo.name}
+  - Archétype: ${JSON.stringify(platformInfo.archetype)}
+  - Heuristique Clé: ${platformInfo.heuristic}
+- Objectif: ${objectiveInfo.name}
+  - Définition Stratégique: ${objectiveInfo.definition}
+- Audience Cible: ${audienceInfo.name}
+  - Besoins et Motivations Clés: ${audienceInfo.needs}
+- Valeurs du service à incarner:
+${valueDriverDetails}
 
-## Valeurs à mettre en avant
-${this.state.valueDrivers.map(value => this.getValueDescription(value)).join('\n')}
+# BRIEF UTILISATEUR
+- Entreprise: ${this.state.companyName || 'une entreprise de taxi locale'}
+- Localisation: ${this.state.location || 'Suisse'}
+- Type de contenu demandé: ${this.state.contentType}
+- Message principal de l'utilisateur: "${this.state.mainMessage || 'Nous offrons un service de taxi fiable, ponctuel et sécurisé.'}"
+- Ressources disponibles:
+${resourcesSummary}
 
-## Ton à adopter
-${toneData.description}
-
-## Ressources disponibles
-${this.state.existingVideos.length > 0 ? `Vidéos existantes : ${this.state.existingVideos.length} liens fournis` : ''}
-${this.state.existingPhotos.length > 0 ? `Photos existantes : ${this.state.existingPhotos.length} liens fournis` : ''}
-${this.state.contentToCreate.length > 0 ? `Contenus à créer : ${this.state.contentToCreate.join(', ')}` : ''}
-
-## Contraintes techniques 2025
-- Format optimisé : ${platformData.format}
-- Durée recommandée : ${contentData.duration}
-- ${contentData.tips}
-
-## Livrables attendus
-1. Texte/script du contenu optimisé pour ${platformData.name}
-2. Suggestions visuelles spécifiques
-3. Call-to-action adapté à l'objectif ${objectiveData.name}
-4. Hashtags recommandés (si applicable)
-5. Meilleur moment de publication
-
-Génère maintenant ce contenu marketing professionnel en respectant tous ces paramètres.`;
+# TÂCHE ET LIVRABLES
+En te basant STRICTEMENT sur la base de connaissances et le brief ci-dessus, génère le contenu suivant :
+1.  **Concept Créatif Principal:** Une idée originale et forte qui fusionne le message, les valeurs et les codes de la plateforme.
+2.  **Script / Texte Détaillé:** Le contenu final, mot pour mot. Pour une vidéo, décris les scènes (visuels) et le son.
+3.  **Appel à l'Action (CTA):** Un CTA clair, aligné sur l'objectif de '${objectiveInfo.name}'.
+4.  **Hashtags Stratégiques:** Une liste de 3-5 hashtags pertinents (mélange de hashtags populaires et de niche).
+5.  **Justification:** Explique brièvement pourquoi ta proposition est efficace en te référant aux théories et connaissances fournies.
+`;
             },
 
-            // Generate JSON prompt
             generateJSONPrompt() {
+                const platformInfo = this.getKnowledge('platforms', this.state.platform);
+                const objectiveInfo = this.getKnowledge('objectives', this.state.objective);
+                const audienceInfo = this.getKnowledge('audiences', this.state.audience);
+                
                 return {
-                    meta: {
-                        client: "PME taxi",
-                        locale: "fr-CH",
-                        ville: this.state.location || "Suisse",
-                        generated_at: new Date().toISOString()
+                    "request_metadata": {
+                        "generator_version": "1.0",
+                        "timestamp": new Date().toISOString()
                     },
-                    platform: this.state.platform,
-                    objective: this.state.objective,
-                    audience: this.state.audience,
-                    content_type: this.state.contentType,
-                    value_drivers: this.state.valueDrivers,
-                    main_message: this.state.mainMessage,
-                    company_name: this.state.companyName,
-                    location: this.state.location,
-                    tone: this.state.tone,
-                    assets: {
-                        videos: this.state.existingVideos,
-                        photos: this.state.existingPhotos,
-                        to_create: this.state.contentToCreate
+                    "persona": "Expert Marketing & Growth Hacking (Secteur PME Transport)",
+                    "knowledge_injection": {
+                        "core_theories": [
+                            this.getKnowledge('theories', 'authenticity'),
+                            this.getKnowledge('theories', 'algorithmic_affordance'),
+                            this.getKnowledge('theories', 'attention_economy')
+                        ],
+                        "platform_context": platformInfo,
+                        "objective_context": objectiveInfo,
+                        "audience_context": audienceInfo,
+                        "value_drivers_context": this.state.valueDrivers.map(v => this.getKnowledge('valueDrivers', v))
                     },
-                    constraints: {
-                        tone: this.state.tone,
-                        locale: "fr-CH",
-                        format: this.getPlatformData().format,
-                        duration: this.getContentData().duration
+                    "user_brief": {
+                        "company_name": this.state.companyName,
+                        "location": this.state.location,
+                        "platform": this.state.platform,
+                        "objective": this.state.objective,
+                        "audience": this.state.audience,
+                        "content_type": this.state.contentType,
+                        "value_drivers_selected": this.state.valueDrivers,
+                        "custom_message": this.state.mainMessage,
+                        "tone": this.state.tone,
+                        "available_assets": {
+                            "videos": this.state.existingVideos,
+                            "photos": this.state.existingPhotos,
+                            "to_create": this.state.contentToCreate
+                        }
                     },
-                    expected_outputs: [
-                        "contenu_final",
-                        "suggestions_visuelles",
-                        "cta_optimise",
-                        "hashtags",
-                        "timing_publication"
-                    ],
-                    knowledge_base_insights: this.getKBInsights()
-                };
-            },
-
-            // Get platform specific data
-            getPlatformData() {
-                const platforms = {
-                    instagram: {
-                        name: 'Instagram',
-                        format: '9:16 (1080x1920)',
-                        specs: 'Reels privilégiés par l\'algorithme (+42% de portée). Stories éphémères 24h. Carrousels pour contenu éducatif.'
-                    },
-                    tiktok: {
-                        name: 'TikTok',
-                        format: '9:16 (1080x1920)',
-                        specs: 'Hooks <3s critiques. Auto-chapitrage IA disponible. Favorise contenu authentique et créatif.'
-                    },
-                    linkedin: {
-                        name: 'LinkedIn',
-                        format: 'Variable selon type',
-                        specs: 'Contenus >800 caractères +70% engagement. Privilégier expertise et témoignages B2B.'
-                    },
-                    facebook: {
-                        name: 'Facebook',
-                        format: 'Variable selon type',
-                        specs: 'Groupes locaux très engagés. Favorise interactions authentiques et contenu communautaire.'
-                    },
-                    youtube: {
-                        name: 'YouTube',
-                        format: 'Shorts 9:16, Long 16:9',
-                        specs: 'Shorts ≤60s, chapitres cliquables. Long format pour tutoriels détaillés.'
-                    },
-                    twitter: {
-                        name: 'X (Twitter)',
-                        format: 'Texte + médias',
-                        specs: 'Messages courts, réactivité temps réel. Excellent pour service client et actualités.'
+                    "task_definition": {
+                        "instruction": "Générer un contenu marketing complet en se basant sur la fusion de la `knowledge_injection` et du `user_brief`.",
+                        "deliverables": [
+                            "creative_concept",
+                            "final_script_or_text",
+                            "optimized_call_to_action",
+                            "strategic_hashtags",
+                            "strategic_justification"
+                        ]
                     }
                 };
-                return platforms[this.state.platform] || platforms.instagram;
             },
 
-            // Get objective specific data  
-            getObjectiveData() {
-                const objectives = {
-                    awareness: {
-                        name: 'Notoriété',
-                        description: 'Faire connaître votre service taxi et augmenter votre visibilité locale. Privilégier format raw authentique.'
-                    },
-                    engagement: {
-                        name: 'Engagement',
-                        description: 'Créer de l\'interaction avec votre communauté. Favoriser commentaires, partages et fidélisation.'
-                    },
-                    conversion: {
-                        name: 'Conversion',
-                        description: 'Transformer les vues en réservations clients. Intégrer CTA forts et processus de réservation.'
-                    },
-                    trust: {
-                        name: 'Confiance',
-                        description: 'Rassurer sur la qualité via témoignages authentiques et preuves sociales crédibles.'
-                    },
-                    education: {
-                        name: 'Éducation',
-                        description: 'Informer sur vos services, tarifs transparents et zones de couverture géographique.'
-                    },
-                    recruitment: {
-                        name: 'Recrutement',
-                        description: 'Attirer nouveaux chauffeurs partenaires. Mettre en avant conditions et avantages.'
-                    }
-                };
-                return objectives[this.state.objective] || objectives.awareness;
-            },
-
-            // Get audience specific data
-            getAudienceData() {
-                const audiences = {
-                    tourists: {
-                        description: 'Touristes découvrant la région, cherchant transport fiable vers attractions. Privilégier visuels authentiques locaux (+30% engagement).'
-                    },
-                    professionals: {
-                        description: 'Professionnels priorisant ponctualité (47% critère décisif) et service aéroports/meetings.'
-                    },
-                    locals: {
-                        description: 'Résidents locaux cherchant service régulier de confiance. Valoriser proximité et connaissance terrain.'
-                    },
-                    elderly: {
-                        description: 'Seniors privilégiant confort, sécurité et assistance personnalisée. Rassurer sur professionnalisme.'
-                    },
-                    students: {
-                        description: 'Étudiants sensibles aux prix. Mettre en avant tarifs transparents et service nuit.'
-                    },
-                    families: {
-                        description: 'Familles priorisant sécurité enfants. Valoriser véhicules adaptés et conduite prudente.'
-                    }
-                };
-                return audiences[this.state.audience] || audiences.locals;
-            },
-
-            // Get content type specific data
-            getContentData() {
-                const contents = {
-                    post: {
-                        name: 'Post statique',
-                        duration: 'Image + texte',
-                        tips: '82% contenus vus sans son mobile. Privilégier texte lisible et visuel impactant.'
-                    },
-                    carousel: {
-                        name: 'Carrousel',
-                        duration: '5-10 slides max',
-                        tips: 'Alt-text obligatoire. Storytelling progressif, CTA slide finale.'
-                    },
-                    video: {
-                        name: 'Vidéo courte',
-                        duration: '≤60 secondes',
-                        tips: 'Hook <3s critique. Sous-titres automatiques + relecture manuelle. Générer 2.5x plus engagement.'
-                    },
-                    story: {
-                        name: 'Story',
-                        duration: '15 secondes',
-                        tips: 'Contenu éphémère 24h. Parfait offres flash et actualités quotidiennes.'
-                    },
-                    live: {
-                        name: 'Live',
-                        duration: '20-60 minutes optimal',
-                        tips: 'Engagement 6x supérieur. +47% ventes vs vidéos classiques. Retard 6s = -6% audience.'
-                    },
-                    testimonial: {
-                        name: 'Témoignage',
-                        duration: '30-90 secondes',
-                        tips: 'Authenticité prime sur production. Contenus raw 4.2x plus partagés.'
-                    }
-                };
-                return contents[this.state.contentType] || contents.post;
-            },
-
-            // Get tone specific data
-            getToneData() {
-                const tones = {
-                    professional: {
-                        description: 'Ton professionnel, rassurant et centré sur la qualité de service. Vocabulaire technique approprié.'
-                    },
-                    friendly: {
-                        description: 'Ton convivial et chaleureux, mettant l\'accent sur l\'aspect humain et la proximité client.'
-                    },
-                    premium: {
-                        description: 'Ton haut de gamme, exclusif et luxueux. Service d\'exception et attention aux détails.'
-                    }
-                };
-                return tones[this.state.tone] || tones.professional;
-            },
-
-            // Get value description
-            getValueDescription(value) {
-                const descriptions = {
-                    'ponctualite': '• Ponctualité : Respect strict des horaires convenus',
-                    'securite': '• Sécurité : Conduite sûre et véhicules entretenus',
-                    'prix-transparent': '• Prix transparents : Tarifs clairs sans surprise',
-                    'confort': '• Confort : Véhicules récents et climatisés',
-                    'disponibilite': '• Disponibilité 24/7 : Service continu',
-                    'local-knowledge': '• Connaissance locale : Expertise du terrain',
-                    'convivialite': '• Convivialité : Accueil chaleureux et personnalisé',
-                    'ecologique': '• Éco-responsable : Véhicules hybrides/électriques'
-                };
-                return descriptions[value] || `• ${value}`;
-            },
-
-            // Get knowledge base insights
-            getKBInsights() {
-                return {
-                    video_stats_2025: "82% vidéos vues sans son mobile, 73% consommateurs préfèrent format court",
-                    engagement_tips: "Contenus raw 4.2x plus partagés, authenticity > production",
-                    platform_optimization: "TikTok hooks <3s, LinkedIn >800 char, IG Reels +42% portée",
-                    swiss_market: "47% clients priorisent ponctualité, 38% sécurité, 31% tarifs transparents",
-                    live_performance: "Live shopping +47% ventes, engagement 6x supérieur"
-                };
-            },
-
-            // Update prompt counter
             updateCounter() {
                 const counter = document.getElementById('prompt-counter');
-                let current = parseInt(counter.textContent) || 0;
-                counter.textContent = current + 1;
-                localStorage.setItem('taxi-cco-counter', current + 1);
+                let current = parseInt(localStorage.getItem('taxi-cco-counter') || '0');
+                current++;
+                counter.textContent = current;
+                localStorage.setItem('taxi-cco-counter', current);
             },
 
-            // Copy to clipboard
             async copyToClipboard(button) {
                 const target = document.getElementById(button.dataset.target);
                 const text = target.textContent;
-
                 try {
                     await navigator.clipboard.writeText(text);
-
-                    // Visual feedback
                     const originalHTML = button.innerHTML;
                     button.innerHTML = '<i class="fas fa-check"></i> Copié !';
                     button.classList.add('success');
-
                     setTimeout(() => {
                         button.innerHTML = originalHTML;
                         button.classList.remove('success');
                     }, 2000);
-
                 } catch (err) {
-                    // Fallback for older browsers
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-
-                    // Visual feedback
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = '<i class="fas fa-check"></i> Copié !';
-                    button.classList.add('success');
-
-                    setTimeout(() => {
-                        button.innerHTML = originalHTML;
-                        button.classList.remove('success');
-                    }, 2000);
+                    console.error('Failed to copy text: ', err);
                 }
             },
 
-            // Restart the flow
             restart() {
-                // Reset state
                 this.currentStep = 0;
                 this.state = {
-                    platform: null,
-                    objective: null,
-                    audience: null,
-                    contentType: null,
-                    existingVideos: [],
-                    existingPhotos: [],
-                    contentToCreate: [],
-                    valueDrivers: [],
-                    mainMessage: '',
-                    companyName: '',
-                    location: '',
-                    tone: 'professional'
+                    platform: null, objective: null, audience: null, contentType: null,
+                    existingVideos: [], existingPhotos: [], contentToCreate: [], valueDrivers: [],
+                    mainMessage: '', companyName: '', location: '', tone: 'professional'
                 };
-
-                // Clear form
-                document.querySelectorAll('.selection-card').forEach(card => {
-                    card.classList.remove('selected');
-                });
+                document.querySelectorAll('.selection-card').forEach(card => card.classList.remove('selected'));
                 document.querySelectorAll('.checkbox-item').forEach(item => {
                     item.classList.remove('checked');
-                    const checkbox = item.querySelector('input');
-                    if (checkbox) checkbox.checked = false;
+                    item.querySelector('input').checked = false;
                 });
-                document.querySelectorAll('input, textarea').forEach(input => {
-                    input.value = '';
-                });
-
-                // Reset progress and show first step
+                document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
                 this.showStep();
                 this.updateProgress();
                 this.validateStep();
-
-                // Clear localStorage
                 localStorage.removeItem('taxi-cco-state');
             }
         };
 
-        // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             TaxiCCOEngine.init();
-
-            // Load counter from localStorage
             const savedCounter = localStorage.getItem('taxi-cco-counter');
-            if (savedCounter) {
-                document.getElementById('prompt-counter').textContent = savedCounter;
-            }
+            if (savedCounter) document.getElementById('prompt-counter').textContent = savedCounter;
         });
-
-        // Handle browser back/forward
-        window.addEventListener('popstate', (e) => {
-            if (e.state && e.state.step !== undefined) {
-                TaxiCCOEngine.currentStep = e.state.step;
-                TaxiCCOEngine.showStep();
-                TaxiCCOEngine.updateProgress();
-            }
-        });
-
-        // Add state to browser history when changing steps
-        const originalNextStep = TaxiCCOEngine.nextStep;
-        const originalPrevStep = TaxiCCOEngine.prevStep;
-
-        TaxiCCOEngine.nextStep = function () {
-            const result = originalNextStep.call(this);
-            if (history.pushState) {
-                history.pushState({ step: this.currentStep }, '', `#step-${this.currentStep}`);
-            }
-            return result;
-        };
-
-        TaxiCCOEngine.prevStep = function () {
-            const result = originalPrevStep.call(this);
-            if (history.pushState) {
-                history.pushState({ step: this.currentStep }, '', `#step-${this.currentStep}`);
-            }
-            return result;
-        };
     </script>
 </body>
 
